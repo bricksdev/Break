@@ -23,38 +23,38 @@
         {% endif %}
 
         <div class="form-group">
-          <label for="title" class="col-sm-2 control-label">Title</label>
+          <label for="title" class="col-sm-2 control-label">{% i18n Title %}</label>
           <div class="col-sm-10">
-            <input type="text" name="title" value="{{ article.title }}" placeholder="Enter the title" class="form-control" id="title">
+            <input type="text" name="title" value="{{ article.title }}" placeholder="{% i18n HintEnterTitle %}" class="form-control" id="title">
           </div>
         </div>
 
         <div class="form-group">
-          <label for="file" class="col-sm-2 control-label">Image</label>
+          <label for="file" class="col-sm-2 control-label">{% i18n Image %}</label>
           <div class="col-sm-10">
             <input type="file" name="image" class="form-control" id="file">
           </div>
         </div>
 
         <div class="form-group">
-          <label for="desc" class="col-sm-2 control-label">Body</label>
+          <label for="desc" class="col-sm-2 control-label">{% i18n Body %}</label>
           <div class="col-sm-10">
-            <textarea rows="5" name="body" placeholder="Enter the article description" id="desc" cols="30" rows="10" class="form-control">{{ article.body }}</textarea>
+            <textarea rows="5" name="body" placeholder="{% i18n HintEnterBody %}" id="desc" cols="30" rows="10" class="form-control">{{ article.body }}</textarea>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="tags" class="col-sm-2 control-label">Tags</label>
+          <label for="tags" class="col-sm-2 control-label">{% i18n Tags %}</label>
           <div class="col-sm-10">
-            <input type="text" name="tags" value="{{ article.tags }}" placeholder="Enter the tags" class="form-control" id="tags">
+            <input type="text" name="tags" value="{{ article.tags }}" placeholder="{% i18n HintEnterTags %}" class="form-control" id="tags">
           </div>
         </div>
 
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn btn-primary" type="submit">{% i18n Save %}</button>
             &nbsp;
-            <a href="/articles" class="btn btn-link">Cancel</a>
+            <a href="/articles" class="btn btn-link">{% i18n Cancel %}</a>
           </div>
         </div>
       </form>

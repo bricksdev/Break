@@ -5,7 +5,7 @@
 
 var mongoose = require('mongoose');
 var utils = require('../../lib/utils');
-
+var localutils = require('../../lib/localutils');
 /**
  * Load comment
  */
@@ -43,9 +43,9 @@ exports.destroy = function (req, res) {
   var article = req.article;
   article.removeComment(req.param('commentId'), function (err) {
     if (err) {
-      req.flash('error', 'Oops! The comment was not found');
+      req.flash('error', localutils.error("EC0001"));//'Oops! The comment was not found'
     } else {
-      req.flash('info', 'Removed comment');
+      req.flash('info', localutils.error("EC0002"));//'Removed comment'
     }
     res.redirect('/articles/' + article.id);
   });

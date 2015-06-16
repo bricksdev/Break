@@ -20,8 +20,8 @@
     {% endif %}
   {% else %}
     <h4 class="muted">
-      No articles.&nbsp;
-      <a href="/articles/new">create one</a>
+      {% i18n NoArticles %}.&nbsp;
+      <a href="/articles/new">{% i18n CreateOne %}</a>
     </h4>
   {% endif %}
 {% endblock %}

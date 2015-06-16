@@ -4,7 +4,7 @@
 
 var mongoose = require('mongoose');
 var Article = mongoose.model('Article');
-
+var localutils = require('../../lib/localutils');
 /**
  * List items tagged with a tag
  */
@@ -23,7 +23,7 @@ exports.index = function (req, res) {
     if (err) return res.render('500');
     Article.count(criteria).exec(function (err, count) {
       res.render('articles/index', {
-        title: 'Articles tagged ' + req.param('tag'),
+        title: localutils.message('ET0001',{tag:req.param('tag')}),
         articles: articles,
         page: page + 1,
         pages: Math.ceil(count / perPage)

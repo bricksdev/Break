@@ -11,7 +11,7 @@ var articles = require('articles');
 var comments = require('comments');
 var tags = require('tags');
 var auth = require('./middlewares/authorization');
-
+var localutils = require('../lib/localutils');
 /**
  * Route middlewares
  */
@@ -33,7 +33,7 @@ module.exports = function (app, passport) {
     app.post('/users/session',
             passport.authenticate('local', {
                 failureRedirect: '/login',
-                failureFlash: 'Invalid email or password.'
+                failureFlash: localutils.error('EU0011')//Invalid email or password.
             }), users.session);
     app.get('/users/:userId', users.show);
     app.get('/auth/facebook',
@@ -130,7 +130,7 @@ module.exports = function (app, passport) {
     app.use(function (req, res, next) {
         res.status(404).render('404', {
             url: req.originalUrl,
-            error: 'Not found'
+            error: localutils.error('E00003')
         });
     });
 };

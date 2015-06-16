@@ -5,16 +5,16 @@
 
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var localutils = require('../../lib/localutils');
+//var localutils = require('../../lib/localutils');
 
 var Schema = mongoose.Schema;
-var oAuthTypes = [
-  'github',
-  'twitter',
-  'facebook',
-  'google',
-  'linkedin'
-];
+//var oAuthTypes = [
+//  'github',
+//  'twitter',
+//  'facebook',
+//  'google',
+//  'linkedin'
+//];
 
 /**
  * User Schema

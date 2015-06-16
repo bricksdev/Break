@@ -10,14 +10,14 @@
       <p>{{ article.body }}</p>
       <div class="meta">
         {% if (article.user) %}
-          Author: &nbsp;
+          {% i18n Author %}: &nbsp;
           <a href="{{ '/users/' + article.user._id }}">
             {{ article.user.name || article.user.username }}
           </a>
         {% endif %}
         {% if (article.tags) %}
           <p>
-            Tags: &nbsp;
+            {% i18n Tags %}: &nbsp;
             {% for tag in article.tags.split(',') %}
               <i class="muted fa fa-tag"></i>&nbsp;
               <a href="{{ '/tags/' + tag }}" class="tag">{{ tag }}</a>
@@ -35,19 +35,19 @@
     </div>
   </div>
 
-  <form action="{{ '/articles/' + article.id }}" method="post" onsubmit="return confirm('Are you sure?')">
+  <form action="{{ '/articles/' + article.id }}" method="post" onsubmit="return confirm('{% i18n AreYouSure %}')">
     <br>
     <input type="hidden" name="_csrf" value="{{ csrf_token }}">
-    <a href="{{ '/articles/' + article._id + '/edit' }}" title="edit" class="btn btn-default">
-      Edit
+    <a href="{{ '/articles/' + article._id + '/edit' }}" title="{% i18n Edit %}" class="btn btn-default">
+      {% i18n Edit %}
     </a>
     &nbsp;
     <input type="hidden" name="_method" value="DELETE">
-    <button class="btn btn-danger" type="submit">Delete</button>
+    <button class="btn btn-danger" type="submit">{% i18n Delete %}</button>
   </form>
 
   <br>
-  <h3>Comments</h3>
+  <h3>{% i18n Comments %}</h3>
   {% for comment in article.comments %}
     {% include '../comments/comment.html' %}
   {% endfor %}

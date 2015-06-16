@@ -10,7 +10,7 @@
 
   {% if (article.user) %}
     &nbsp; - &nbsp;
-    <span>Author: </span>
+    <span>{% i18n Author %}: </span>
     <a href="{{ '/users/' + article.user._id }}">
       {{ article.user.name || article.user.username }}
     </a>
@@ -18,7 +18,7 @@
 
   {% if (article.tags) %}
     &nbsp; - &nbsp;
-    <span>Tags: </span>
+    <span>{% i18n Tags %}: </span>
     {% for tag in article.tags.split(',') %}
       <i class="muted fa fa-tag"></i>&nbsp;
       <a href="{{ '/tags/' + tag }}" class="tag">{{ tag }}</a>

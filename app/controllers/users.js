@@ -33,6 +33,12 @@ var validation = function (user, cb) {
         }
         if (!user.email) {
             errs.push(new Error(localutils.error("EU0002")));
+        }else{
+            validateEMail(user.email, function(bool){
+                if(bool){
+                    errs.push(new Error(localutils.error("EU0003")));
+                }
+            });
         }
         if (!user.username) {
             errs.push(new Error(localutils.error("EU0004")));
@@ -45,10 +51,14 @@ var validation = function (user, cb) {
     return cb(errs.length ? errs : null);
 };
 
-var validateEMail = function (email) {
+var validateEMail = function (email, cb) {
     var bool = false;
-//    User.
-    return bool;
+    User.find({ email: email }).exec(function (err, users) {
+        
+         cb(!err && (users.length === 0));
+        
+    });
+    cb(bool);
 };
 
 /**
@@ -79,7 +89,7 @@ exports.load = function (req, res, next, id) {
         if (err)
             return next(err);
         if (!user)
-            return next(new Error('Failed to load User ' + id));
+            return next(new Error(localutils.error("EU0007" ,{userid: id})));//'Failed to load User '
         req.profile = user;
         next();
     });
@@ -97,7 +107,7 @@ exports.create = function (req, res) {
             return res.render('users/signup', {
                 errors: utils.errors(err.errors || err),
                 user: user,
-                title: 'Sign up'
+                title: localutils.message("EU0008")//Sign up
             });
         }
         user.save(function (err) {
@@ -105,14 +115,14 @@ exports.create = function (req, res) {
                 return res.render('users/signup', {
                     errors: utils.errors(err.errors || err),
                     user: user,
-                    title: 'Sign up'
+                    title: localutils.message("EU0008")//Sign up
                 });
             }
 
             // manually login the user once successfully signed up
             req.logIn(user, function (err) {
                 if (err)
-                    req.flash('info', 'Sorry! We are not able to log you in!');
+                    req.flash('info', localutils.error("EU0009"));//Sorry! We are not able to log you in!
                 return res.redirect('/');
             });
         });
@@ -148,7 +158,7 @@ exports.authCallback = login;
 
 exports.login = function (req, res) {
     res.render('users/login', {
-        title: 'Login'
+        title: localutils.message("EU0010")//Login
     });
 };
 
@@ -158,7 +168,7 @@ exports.login = function (req, res) {
 
 exports.signup = function (req, res) {
     res.render('users/signup', {
-        title: 'Sign up',
+        title: localutils.message("EU0008"),//Sign up
         user: new User()
     });
 };
