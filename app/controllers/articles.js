@@ -8,6 +8,8 @@ var Article = mongoose.model('Article');
 var utils = require('../../lib/utils');
 var extend = require('util')._extend;
 var localutils = require('../../lib/localutils');
+var config = require('config');
+var fs = require('fs');
 
 /**
  * 此处将验证提前业务层，减少对model的依赖验证
@@ -45,6 +47,9 @@ exports.load = function (req, res, next, id) {
         if (!article)
             return next(new Error(localutils.message('E00001')));//'not found'
         req.article = article;
+        if("Local" === config.imageType){
+            article.image.cdnUri = "image";
+        }
         next();
     });
 };
@@ -185,3 +190,23 @@ exports.destroy = function (req, res) {
     });
 };
 
+exports.image = function (req, res) {
+    var path = config.imageLocalPath;
+    var filename = req.params.imagename;
+//    console.log(filename);
+    if (filename) {
+        fs.readFile(path + "/" + filename, function (err, data) {
+//            console.log(err, data);
+            res.writeHead(200, {"Content-Type": "image/*"});
+//            res.encoding('binary');
+            if (err) {
+
+                res.write("ERROR");
+            } else {
+
+                res.write(data, "binary");
+            }
+            res.end();
+        });
+    }
+};

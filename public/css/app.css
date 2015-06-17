@@ -18,17 +18,27 @@ body {
   padding: 0 0 60px;
 }
 
-/* Set the fixed height of the footer here */
+ /*Set the fixed height of the footer here*/ 
 #footer {
-  height: 60px;
+  text-align: center;
+  padding: 30px 0;
+  margin-top: 70px;
+  border-top: 1px solid #e5e5e5;
   background-color: #f5f5f5;
 }
 
 
 /* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
+-------------------------------------------------- 
+ Not required for template or sticky footer method. */
 
+#scrollUp {
+    background-image: url("../../img/top.png");
+    bottom: 20px;
+    right: 20px;
+    width: 38px;    /* Width of image */
+    height: 38px;   /* Height of image */
+}
 
 .container .text-muted {
   margin: 20px 0;

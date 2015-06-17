@@ -1,7 +1,21 @@
 <script src='/js/jquery.min.js'></script>
 <script src='/js/bootstrap.min.js'></script>
 <script src='/js/jquery.tagsinput.min.js'></script>
+<script src='/js/jquery.scrollUp.min.js'></script>
 <script src='/js/app.js'></script>
+<script>
+    $(function () {
+        $.scrollUp({
+            animation: 'fade',
+            scrollImg: {
+                active: true,
+                type: 'background'
+            }
+        });
+        $('.carousel').carousel();
+    });
+    
+</script>
 <!--<script>
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-25468002-1']);

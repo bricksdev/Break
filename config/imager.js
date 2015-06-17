@@ -23,7 +23,7 @@ module.exports = {
     },
     storage: {
         Local: {
-            path: "/home/kete/Pictures/bw-images"
+            path: process.env.IMAGE_LOCAL_PATH
         },
         S3: {
             key: process.env.IMAGER_S3_KEY,

@@ -61,7 +61,7 @@ var ArticleSchema = new Schema({
  */
 
 ArticleSchema.pre('remove', function (next) {
-    var imager = new Imager(imagerConfig, 'Local');
+    var imager = new Imager(imagerConfig, config.imageType);
     var files = this.image.files;
 
     // if there are files associated with the item, remove from the cloud too
@@ -90,7 +90,7 @@ ArticleSchema.methods = {
         if (!images || !images.length)
             return this.save(cb);
 
-        var imager = new Imager(imagerConfig, 'Local');
+        var imager = new Imager(imagerConfig, config.imageType);
         var self = this;
 
         this.validate(function (err) {

@@ -101,6 +101,9 @@ module.exports = function (app, passport) {
     // home route
     app.get('/', homes.home);
     app.get('/search', homes.search);
+    
+    app.param('imagename', articles.image);
+    app.get('/articles/image/:imagename', articles.image);
 
     // comment routes
     app.param('commentId', comments.load);

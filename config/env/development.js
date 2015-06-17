@@ -25,6 +25,9 @@ if (fs.existsSync(envFile)) {
 
 module.exports = {
   db: 'mongodb://localhost/noobjs_dev',
+  // 定义图片上传类型
+  imageType:process.env.IMAGE_TYPE,
+  imageLocalPath:process.env.IMAGE_LOCAL_PATH,
   facebook: {
     clientID: process.env.FACEBOOK_CLIENTID,
     clientSecret: process.env.FACEBOOK_SECRET,
