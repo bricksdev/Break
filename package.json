@@ -1,12 +1,15 @@
 {
   "name": "BreakWeb",
-  "description": "A demo app illustrating the usage of express, mongoose, passportjs, swig and other modules in nodejs",
+  "description": "A demo app illustrating the usage of express, mongoose, passportjs, swig, swig extend for localization and other modules in nodejs",
   "keywords": [
     "express",
     "mongoose",
     "mongodb",
     "passport",
-    "break"
+    "break",
+    "nationalization",
+    "localization",
+    "swig"
   ],
   "version": "1.0.0",
   "private": true,

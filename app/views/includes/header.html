@@ -2,7 +2,7 @@
   <div class="container">
     <div class="navbar-header">
       <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
-        <span class="sr-only">Toggle navigation</span>
+        <span class="sr-only">{% i18n Navigation %}</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -19,7 +19,12 @@
           <li class="{% if (isActive('/users/' + req.user.id )) %}active{% endif %}">
             <a href="{{ '/users/' + req.user.id }}" title="{% i18n Profile %}">{% i18n Profile %}</a>
           </li>
-          <li>
+        {% endif %}
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+       {% if (req.isAuthenticated()) %}
+          <li >
             <a href="/logout" title="{% i18n Logout %}">{% i18n Logout %}</a>
           </li>
         {% else %}
@@ -28,21 +33,6 @@
           </li>
         {% endif %}
       </ul>
-
-<!--      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href="https://www.gratipay.com/madhums/"><img src="https://img.shields.io/gratipay/madhums.svg?style=flat" alt="Gittip" data-canonical-src="https://img.shields.io/gratipay/madhums.svg?style=flat" style="max-width:100%;"></a>
-        </li>
-        <li>
-          <iframe src="http://ghbtns.com/github-btn.html?user=madhums&amp;repo=node-express-mongoose-demo&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="45" style="padding: 15px 0 0 15px;"></iframe>
-        </li>
-        <li>
-          <iframe src="http://ghbtns.com/github-btn.html?user=madhums&amp;repo=node-express-mongoose-demo&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="45" style="padding: 15px 0 0 15px;"></iframe>
-        </li>
-        <li>
-          <a href="https://travis-ci.org/madhums/node-express-mongoose-demo"><img src="https://img.shields.io/travis/madhums/node-express-mongoose-demo.svg?style=flat" alt="Build Status" data-canonical-src="https://img.shields.io/travis/madhums/node-express-mongoose-demo.svg?style=flat" style="max-width:100%;"></a>
-        </li>
-      </ul>-->
     </div>
   </div>
 </nav>
