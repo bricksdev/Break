@@ -10,6 +10,7 @@ var users = require('users');
 var articles = require('articles');
 var comments = require('comments');
 var tags = require('tags');
+var homes = require('homes');
 var auth = require('./middlewares/authorization');
 var localutils = require('../lib/localutils');
 /**
@@ -98,7 +99,8 @@ module.exports = function (app, passport) {
     app.delete('/articles/:id', articleAuth, articles.destroy);
 
     // home route
-    app.get('/', articles.index);
+    app.get('/', homes.home);
+    app.get('/search', homes.search);
 
     // comment routes
     app.param('commentId', comments.load);

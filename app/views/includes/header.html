@@ -11,9 +11,12 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li class="{% if (isActive('/articles/new')) %}active{% endif %}">
-          <a href="/articles/new" title="{% i18n NewArticle %}">{% i18n New %}</a>
+        <li class="{% if (isActive('/articles')) %}active{% endif %}">
+          <a href="/articles" title="{% i18n Articles %}">{% i18n Articles %}</a>
         </li>
+<!--        <li class="{% if (isActive('/articles/new')) %}active{% endif %}">
+          <a href="/articles/new" title="{% i18n NewArticle %}">{% i18n New %}</a>
+        </li>-->
 
         {% if (req.isAuthenticated()) %}
           <li class="{% if (isActive('/users/' + req.user.id )) %}active{% endif %}">
@@ -21,8 +24,9 @@
           </li>
         {% endif %}
       </ul>
-
+      
       <ul class="nav navbar-nav navbar-right">
+        
        {% if (req.isAuthenticated()) %}
           <li >
             <a href="/logout" title="{% i18n Logout %}">{% i18n Logout %}</a>
@@ -33,6 +37,9 @@
           </li>
         {% endif %}
       </ul>
+        <form action="/search" class="navbar-form navbar-right" >
+          <input type="text" class="form-control" placeholder="Search...">
+      </form>
     </div>
   </div>
 </nav>
