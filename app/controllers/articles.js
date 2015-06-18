@@ -8,8 +8,9 @@ var Article = mongoose.model('Article');
 var utils = require('../../lib/utils');
 var extend = require('util')._extend;
 var localutils = require('../../lib/localutils');
+var imageutils = require('../../lib/imageutils');
 var config = require('config');
-var fs = require('fs');
+
 
 /**
  * 此处将验证提前业务层，减少对model的依赖验证
@@ -18,21 +19,16 @@ var fs = require('fs');
  * @returns {unresolved}
  */
 var validation = function (article, cb) {
-    var errs;
+    var errs = [];
     // 验证文章标题/文章内容必须输入
-    if (article.title && article.body) {
-        return cb(errs);
-    } else {
-        errs = [];
-        if (!article.title) {
-            errs.push(new Error(localutils.error("EA0001")));
+    if (!article.title) {
+        errs.push(new Error(localutils.error("EA0001")));
 
-        }
-        if (!article.body) {
-            errs.push(new Error(localutils.error("EA0002")));
-        }
     }
-    return cb(errs);
+    if (!article.body) {
+        errs.push(new Error(localutils.error("EA0002")));
+    }
+    return cb(errs.length ? errs : null);
 };
 
 /**
@@ -189,16 +185,17 @@ exports.destroy = function (req, res) {
         res.redirect('/articles');
     });
 };
-
+/**
+ * display local article picture file 
+ * @param {type} req
+ * @param {type} res
+ * @returns {undefined}
+ */
 exports.image = function (req, res) {
-    var path = config.imageLocalPath;
     var filename = req.params.imagename;
-//    console.log(filename);
     if (filename) {
-        fs.readFile(path + "/" + filename, function (err, data) {
-//            console.log(err, data);
+        imageutils.image(filename, function (err, data) {
             res.writeHead(200, {"Content-Type": "image/*"});
-//            res.encoding('binary');
             if (err) {
 
                 res.write("ERROR");
