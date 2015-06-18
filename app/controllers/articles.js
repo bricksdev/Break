@@ -43,7 +43,7 @@ exports.load = function (req, res, next, id) {
         if (!article)
             return next(new Error(localutils.message('E00001')));//'not found'
         req.article = article;
-        if("Local" === config.imageType){
+        if ("Local" === config.imageType) {
             article.image.cdnUri = "image";
         }
         next();
@@ -67,7 +67,7 @@ exports.index = function (req, res) {
             return res.render('500');
         Article.count().exec(function (err, count) {
             res.render('articles/index', {
-                title: localutils.message('EA0003'),//'Articles'
+                title: localutils.message('EA0003'), //'Articles'
                 articles: articles,
                 page: page + 1,
                 pages: Math.ceil(count / perPage)
@@ -82,7 +82,7 @@ exports.index = function (req, res) {
 
 exports.new = function (req, res) {
     res.render('articles/new', {
-        title: localutils.message('EA0004'),//'New Article'
+        title: localutils.message('EA0004'), //'New Article'
         article: new Article({})
     });
 };
@@ -102,7 +102,7 @@ exports.create = function (req, res) {
     validation(article, function (err) {
         if (err) {
             res.render('articles/new', {
-                title: localutils.message('EA0004'),//'New Article'
+                title: localutils.message('EA0004'), //'New Article'
                 article: article,
                 errors: utils.errors(err.errors || err)
             });
@@ -116,7 +116,7 @@ exports.create = function (req, res) {
             }
 
             res.render('articles/new', {
-                title: localutils.message('EA0004'),//'New Article'
+                title: localutils.message('EA0004'), //'New Article'
                 article: article,
                 errors: utils.errors(err.errors || err)
             });
@@ -131,7 +131,7 @@ exports.create = function (req, res) {
 
 exports.edit = function (req, res) {
     res.render('articles/edit', {
-        title: localutils.message('EA0006', {article:req.article.title}),//'Edit '
+        title: localutils.message('EA0006', {article: req.article.title}), //'Edit '
         article: req.article
     });
 };
@@ -149,16 +149,24 @@ exports.update = function (req, res) {
     // make sure no one changes the user
     delete req.body.user;
     article = extend(article, req.body);
-
-    article.uploadAndSave(images, function (err) {
-        if (!err) {
-            return res.redirect('/articles/' + article._id);
+    validation(article, function (err) {
+        if (err) {
+            return res.render('articles/edit', {
+                title: localutils.message('EA0007'), //'Edit Article'
+                article: article,
+                errors: utils.errors(err.errors || err)
+            });
         }
+        article.uploadAndSave(images, function (err) {
+            if (!err) {
+                return res.redirect('/articles/' + article._id);
+            }
 
-        res.render('articles/edit', {
-            title: localutils.message('EA0007'),//'Edit Article'
-            article: article,
-            errors: utils.errors(err.errors || err)
+            res.render('articles/edit', {
+                title: localutils.message('EA0007'), //'Edit Article'
+                article: article,
+                errors: utils.errors(err.errors || err)
+            });
         });
     });
 };
@@ -181,7 +189,7 @@ exports.show = function (req, res) {
 exports.destroy = function (req, res) {
     var article = req.article;
     article.remove(function (err) {
-        req.flash('info', localutils.message('EA0008', {article:article.title}));//'Deleted successfully'
+        req.flash('info', localutils.message('EA0008', {article: article.title}));//'Deleted successfully'
         res.redirect('/articles');
     });
 };

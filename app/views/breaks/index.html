@@ -1,0 +1,29 @@
+{% extends '../layouts/default.html' %}
+
+{% block main %}
+  
+  <a class="btn btn-default pull-right" href="/articles/new" title="{% i18n NewArticle %}">{% i18n New %}</a>
+  <h1>{{ title }}</h1>
+
+{% endblock %}
+
+{% block content %}
+  {% if (articles.length) %}
+    {% for article in articles %}
+      {% include 'breaknotify.html' %}
+    {% endfor %}
+
+    {% if (pages > 1) %}
+      <ul class="pagination">
+        {% autoescape false %}
+          {{ createPagination(pages, page) }}
+        {% endautoescape %}
+      </ul>
+    {% endif %}
+  {% else %}
+    <h4 class="muted">
+      {% i18n NoArticles %}.&nbsp;
+      <a href="/articles/new">{% i18n CreateOne %}</a>
+    </h4>
+  {% endif %}
+{% endblock %}

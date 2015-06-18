@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-exports.home = function(req, res){
-    
+var localutils = require('../../lib/localutils');
+exports.home = function (req, res) {
+
     res.render('homes/home', {
-        title: "Home"//Home
+        title: localutils.message("EH0001")//Home
     });
 };
 
-exports.search = function(req, res){
-   res.redirect('/articles');
+exports.search = function (req, res) {
+    res.redirect('/articles');
 };
 

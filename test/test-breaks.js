@@ -9,16 +9,16 @@ var mongoose = require('mongoose')
         , app = require('../server')
         , context = describe
         , User = mongoose.model('User')
-        , Article = mongoose.model('Article')
+        , Breaks = mongoose.model('Breaks')
         , agent = request.agent(app);
 var count;
 
 
 /**
- * Articles tests
+ * Breaks tests
  */
 
-describe('Articles', function () {
+describe('Breaks', function () {
 
     before(function (done) {
         // create a user
@@ -31,11 +31,32 @@ describe('Articles', function () {
         user.save(done);
     });
 
-    describe('GET /articles/new', function () {
+    describe('GET /breaks', function () {
+        context('When logged in', function () {
+            before(function (done) {
+                // login the user
+                agent
+                        .post('/users/session')
+                        .field('email', 'foobar@example.com')
+                        .field('password', 'foobar')
+                        .end(done);
+            });
+            it('should respond with Content-Type text/html', function (done) {
+                agent
+                        .get('/breaks')
+                        .expect('Content-Type', /html/)
+                        .expect(200)
+                        .expect(/Breaks/)
+                        .end(done);
+            });
+        });
+    });
+
+    describe('GET /breaks/new', function () {
         context('When not logged in', function () {
             it('should redirect to /login', function (done) {
                 agent
-                        .get('/articles/new')
+                        .get('/breaks/new')
                         .expect('Content-Type', /plain/)
                         .expect(302)
                         .expect('Location', '/login')
@@ -56,39 +77,20 @@ describe('Articles', function () {
 
             it('should respond with Content-Type text/html', function (done) {
                 agent
-                        .get('/articles/new')
+                        .get('/breaks/new')
                         .expect('Content-Type', /html/)
                         .expect(200)
-                        .expect(/New Article/)
+                        .expect(/New Break/)
                         .end(done);
             });
         });
     });
-    describe('GET /articles', function () {
-//        before(function (done) {
-//                // login the user
-//                agent
-//                        .post('/users/session')
-//                        .field('email', 'foobar@example.com')
-//                        .field('password', 'foobar')
-//                        .end(done);
-//            });
-        it('should respond with Content-Type text/html', function (done) {
-            agent
-                    .get('/articles')
-                    .expect('Content-Type', /html/)
-                    .expect(200)
-                    .expect(/Articles/)
-                    .end(done);
-        });
-    });
 
-
-    describe('POST /articles', function () {
+    describe('POST /breaks', function () {
         context('When not logged in', function () {
             it('should redirect to /login', function (done) {
                 request(app)
-                        .get('/articles/new')
+                        .get('/breaks/new')
                         .expect('Content-Type', /plain/)
                         .expect(302)
                         .expect('Location', '/login')
@@ -109,7 +111,7 @@ describe('Articles', function () {
 
             describe('Invalid parameters', function () {
                 before(function (done) {
-                    Article.count(function (err, cnt) {
+                    Breaks.count(function (err, cnt) {
                         count = cnt;
                         done();
                     });
@@ -117,17 +119,20 @@ describe('Articles', function () {
 
                 it('should respond with error', function (done) {
                     agent
-                            .post('/articles')
+                            .post('/breaks')
                             .field('title', '')
-                            .field('body', 'foo')
+                            .field('runtime', '1')
+                            .field('breaktime', '1')
+                            .field('comment', '1')
+
                             .expect('Content-Type', /html/)
                             .expect(200)
-                            .expect(/EA0001/)//nationalization messagess Article title cannot be blank
+                            .expect(/EB0011/)//nationalization messagess  title cannot be blank
                             .end(done);
                 });
 
                 it('should not save to the database', function (done) {
-                    Article.count(function (err, cnt) {
+                    Breaks.count(function (err, cnt) {
                         count.should.equal(cnt);
                         done();
                     });
@@ -136,62 +141,47 @@ describe('Articles', function () {
 
             describe('Valid parameters', function () {
                 before(function (done) {
-                    Article.count(function (err, cnt) {
+                    Breaks.count(function (err, cnt) {
                         count = cnt;
                         done();
                     });
                 });
 
-                it('should redirect to the new article page', function (done) {
+                it('should redirect to the new break notify page', function (done) {
                     agent
-                            .post('/articles')
-                            .field('title', 'foo')
-                            .field('body', 'bar')
+                            .post('/breaks')
+                            .field('title', 'boo')
+                            .field('runtime', '1')
+                            .field('breaktime', '1')
+                            .field('comment', '1')
+                            .field('relusers', '[1]')
                             .expect('Content-Type', /plain/)
-                            .expect('Location', /\/articles\//)
+                            .expect('Location', /\/breaks\//)
                             .expect(302)
                             .expect(/Moved Temporarily/)
                             .end(done);
                 });
 
                 it('should insert a record to the database', function (done) {
-                    Article.count(function (err, cnt) {
+                    Breaks.count(function (err, cnt) {
                         cnt.should.equal(count + 1);
                         done();
                     });
                 });
 
-                it('should save the article to the database', function (done) {
-                    Article
-                            .findOne({title: 'foo'})
+                it('should save the break notify to the database', function (done) {
+                    Breaks
+                            .findOne({title: 'boo'})
                             .populate('user')
-                            .exec(function (err, article) {
+                            .exec(function (err, breaks) {
                                 should.not.exist(err);
-                                article.should.be.an.instanceOf(Article);
-                                article.title.should.equal('foo');
-                                article.body.should.equal('bar');
-                                article.user.email.should.equal('foobar@example.com');
-                                article.user.name.should.equal('Foo bar');
+                                breaks.should.be.an.instanceOf(Breaks);
+                                'boo'.should.equal(breaks.title);
                                 done();
                             });
                 });
             });
         });
-    });
-
-    describe('Images', function () {
-
-        describe("#display pictures", function () {
-
-            it("After upload picture display uploaded picture.", function (done) {
-
-                agent.get('/articles/image/mini_1434292888920.png')
-                        .expect('Content-Type', /image/)
-                        .expect(200)
-                        .end(done);
-            });
-        });
-
     });
 
     after(function (done) {

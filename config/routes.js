@@ -11,12 +11,15 @@ var articles = require('articles');
 var comments = require('comments');
 var tags = require('tags');
 var homes = require('homes');
+var breaks = require('breaks');
+var userdetails = require('userdetails');
 var auth = require('./middlewares/authorization');
 var localutils = require('../lib/localutils');
 /**
  * Route middlewares
  */
 
+var breaksAuth = [auth.requiresLogin, auth.breaks.hasAuthorization];
 var articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 var commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
 
@@ -97,6 +100,16 @@ module.exports = function (app, passport) {
     app.get('/articles/:id/edit', articleAuth, articles.edit);
     app.put('/articles/:id', articleAuth, articles.update);
     app.delete('/articles/:id', articleAuth, articles.destroy);
+    
+    // breaks routes
+    app.param('id', breaks.load);
+    app.get('/breaks', breaks.index);
+    app.get('/breaks/new', auth.requiresLogin, breaks.new);
+    app.post('/breaks', auth.requiresLogin, breaks.create);
+    app.get('/breaks/:id', breaks.show);
+    app.get('/breaks/:id/edit', breaksAuth, breaks.edit);
+    app.put('/breaks/:id', breaksAuth, breaks.update);
+    app.delete('/breaks/:id', breaksAuth, breaks.destroy);
 
     // home route
     app.get('/', homes.home);
