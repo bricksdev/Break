@@ -30,28 +30,6 @@ describe('Breaks', function () {
         });
         user.save(done);
     });
-
-    describe('GET /breaks', function () {
-        context('When logged in', function () {
-            before(function (done) {
-                // login the user
-                agent
-                        .post('/users/session')
-                        .field('email', 'foobar@example.com')
-                        .field('password', 'foobar')
-                        .end(done);
-            });
-            it('should respond with Content-Type text/html', function (done) {
-                agent
-                        .get('/breaks')
-                        .expect('Content-Type', /html/)
-                        .expect(200)
-                        .expect(/Breaks/)
-                        .end(done);
-            });
-        });
-    });
-
     describe('GET /breaks/new', function () {
         context('When not logged in', function () {
             it('should redirect to /login', function (done) {
@@ -81,6 +59,26 @@ describe('Breaks', function () {
                         .expect('Content-Type', /html/)
                         .expect(200)
                         .expect(/New Break/)
+                        .end(done);
+            });
+        });
+    });
+    describe('GET /breaks', function () {
+        context('When logged in', function () {
+            before(function (done) {
+                // login the user
+                agent
+                        .post('/users/session')
+                        .field('email', 'foobar@example.com')
+                        .field('password', 'foobar')
+                        .end(done);
+            });
+            it('should respond with Content-Type text/html', function (done) {
+                agent
+                        .get('/breaks')
+                        .expect('Content-Type', /html/)
+                        .expect(200)
+                        .expect(/Breaks/)
                         .end(done);
             });
         });
@@ -154,7 +152,7 @@ describe('Breaks', function () {
                             .field('runtime', '1')
                             .field('breaktime', '1')
                             .field('comment', '1')
-                            .field('relusers', '[1]')
+                            .field('relusers', 'ad1')
                             .expect('Content-Type', /plain/)
                             .expect('Location', /\/breaks\//)
                             .expect(302)

@@ -1,28 +1,26 @@
-<div class="article">
-  <h3>
-    <a href="{{ '/articles/' + article._id }}" title="{{ article.title }}">
-      {{ article.title }}
-    </a>
-  </h3>
-  <p>{{ article.body }}</p>
 
-  <span class="muted">{{ article.createdAt.toISOString()|date('M d, Y  h:m a') }}</span>
+  <tr class="odd gradeX">
+        <td class="center">
+            <a href="{{ '/breaks/' + breaknotify._id }}" title="{{ breaknotify.title }}">
+                {{ breaknotify.title }}
+            </a>
+        </td>
+        <td class="center">
+         {{ breaknotify.runtime }}
+        </td>
+        <td class="center">{{ breaknotify.breaktime }}</td>
+        <td class="center">{{ breaknotify.comment }}</td>
+        <td class="center">{{ breaknotify.createdAt.toISOString()|date('M d, Y  h:m a') }}</td>
+        <td class="center">{{ breaknotify.state }}</td>
+        <td class="center">
+          {% if (breaknotify.relusers) %}
+    
+            {% for reluser in breaknotify.relusers.split(',') %}
+              <i class="muted fa fa-tag"></i>&nbsp;
+              <a href="{{ '/users/' + reluser }}" class="tag">{{ reluser }}</a>
+              &nbsp;&nbsp;
+            {% endfor %}
+          {% endif %}
+        </td>
+  </tr>
 
-  {% if (article.user) %}
-    &nbsp; - &nbsp;
-    <span>{% i18n Author %}: </span>
-    <a href="{{ '/users/' + article.user._id }}">
-      {{ article.user.name || article.user.username }}
-    </a>
-  {% endif %}
-
-  {% if (article.tags) %}
-    &nbsp; - &nbsp;
-    <span>{% i18n Tags %}: </span>
-    {% for tag in article.tags.split(',') %}
-      <i class="muted fa fa-tag"></i>&nbsp;
-      <a href="{{ '/tags/' + tag }}" class="tag">{{ tag }}</a>
-      &nbsp;&nbsp;
-    {% endfor %}
-  {% endif %}
-</div>

@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var Breaks = mongoose.model('Breaks');
 var utils = require('../../lib/utils');
 var localutils = require('../../lib/localutils');
-
+var env = process.env.NODE_ENV || 'development';
 
 /**
  * 此处将验证提前业务层，减少对model的依赖验证
@@ -43,10 +43,8 @@ var validation = function (brk, cb) {
         errs.push(new Error(localutils.error("EB0011")));// title cannot be blank.
     }
 
+        
     if (!brk.relusers) {
-        errs.push(new Error(localutils.error("EB0009")));// relation user cannot be blank.
-    }
-    if (brk.relusers && !brk.relusers.length) {
         errs.push(new Error(localutils.error("EB0009")));// relation user cannot be blank.
     }
 
@@ -95,7 +93,9 @@ exports.index = function (req, res) {
 
 
 exports.create = function (req, res) {
+    
     var breaks = new Breaks(req.body);
+    
     breaks.user = req.user;
     validation(breaks, function (err) {
         if (err) {
@@ -105,13 +105,17 @@ exports.create = function (req, res) {
                 errors: utils.errors(err.errors || err)
             });
         }
-
+        
         breaks.save(function (err) {
             if (!err) {
                 req.flash('success', localutils.message('EB0003'));//'Successfully create break notify!'
                 return res.redirect('/breaks/' + breaks._id);
             }
-
+            res.render('breaks/new', {
+                title: localutils.message('EB0010'), //'New Break Notify'
+                breaks: breaks,
+                errors: utils.errors(err.errors || err)
+            });
         });
     });
 
@@ -138,7 +142,7 @@ exports.update = function (req, res) {
     var breaks = req.breaks;
     // make sure no one changes the user
     delete req.body.user;
-    breaks = extend(article, req.body);
+    breaks = extend(breaks, req.body);
     validation(breaks, function (err) {
         if (err) {
             res.render('breaks/edit', {

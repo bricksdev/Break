@@ -103,7 +103,7 @@ module.exports = function (app, passport) {
     
     // breaks routes
     app.param('id', breaks.load);
-    app.get('/breaks', breaks.index);
+    app.get('/breaks', auth.requiresLogin, breaks.index);
     app.get('/breaks/new', auth.requiresLogin, breaks.new);
     app.post('/breaks', auth.requiresLogin, breaks.create);
     app.get('/breaks/:id', breaks.show);
