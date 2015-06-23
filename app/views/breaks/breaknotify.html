@@ -1,52 +1,55 @@
-
 <div class="row">
-    <h3>
-        <a href="{{ '/breaks/' + breaknotify._id }}" title="{{ breaknotify.title }}">
-            {{ breaknotify.title }}
-        </a>
-    </h3>
-    <div class="col-xs-2">
-        {% i18n Runtime %}
-        <br/>
-        {{ breaknotify.runtime }}
+    <div class="col-md-12">
 
+        <h3>
+            <a href="{{ '/breaks/' + breaknotify._id }}" title="{{ breaknotify.title }}">
+                {{ breaknotify.title }}
+            </a>
+        </h3>
+        <div class="row"> 
+            <div class="col-xs-6  col-md-2">
+                {% i18n Runtime %}
+                <br/>
+                {{ breaknotify.runtime }}
+
+            </div>
+            <div class="col-xs-6  col-sm-2">
+                {% i18n Breaktime %}
+                <br/>
+                {{ breaknotify.breaktime }}
+
+            </div>
+            <div class="col-xs-6  col-sm-2">
+                {% i18n Comment %}
+                <br/>
+                {{ breaknotify.comment }}
+
+            </div>
+            <div class="col-xs-6  col-sm-2">
+                {% i18n RelationClient %}
+                <br/>
+                {% if (breaknotify.relusers) %}
+
+                {% for reluser in breaknotify.relusers.split(',') %}
+                <i class="muted fa fa-tag"></i>&nbsp;
+                <a href="{{ '/users/' + reluser }}" class="tag">{{ reluser }}</a>
+                &nbsp;&nbsp;
+                {% endfor %}
+                {% endif %}
+
+
+            </div>
+            <div class="col-xs-6  col-sm-2">
+                {% i18n CreateTime %}
+                <br/>
+                {{ breaknotify.createdAt.toISOString()|date('M d, Y  h:m a') }}
+
+            </div>
+            <div class="col-xs-6  col-sm-2">
+                {% i18n State %}
+                <br/>
+                {{ breaknotify.state }} &nbsp;
+            </div>
+        </div>
     </div>
-    <div class="col-xs-2">
-        {% i18n Breaktime %}
-        <br/>
-        {{ breaknotify.breaktime }}
-
-    </div>
-    <div class="col-xs-2">
-        {% i18n Comment %}
-        <br/>
-        {{ breaknotify.comment }}
-
-    </div>
-    <div class="col-xs-2">
-        {% i18n RelationClient %}
-        <br/>
-        {% if (breaknotify.relusers) %}
-
-        {% for reluser in breaknotify.relusers.split(',') %}
-        <i class="muted fa fa-tag"></i>&nbsp;
-        <a href="{{ '/users/' + reluser }}" class="tag">{{ reluser }}</a>
-        &nbsp;&nbsp;
-        {% endfor %}
-        {% endif %}
-
-
-    </div>
-    <div class="col-xs-2">
-        {% i18n CreateTime %}
-        <br/>
-        {{ breaknotify.createdAt.toISOString()|date('M d, Y  h:m a') }}
-
-    </div>
-    <div class="col-xs-2">
-        {% i18n State %}
-        <br/>
-        {{ breaknotify.state }} &nbsp;
-    </div>
-
 </div>
