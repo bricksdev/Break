@@ -110,17 +110,18 @@ button.error:focus {
 }*/
 
 
+
 h4 {
   margin-top: 25px;
 }
-.row {
+.row-grid {
   margin-bottom: 10px;
 }
-.row .row {
+.row-grid .row-grid {
   margin-top: 5px;
   margin-bottom: 0;
 }
-.row [class*="col-"] {
+.row-grid [class*="col-"] {
   padding-top: 15px;
   padding-bottom: 0px;
   background-color: #f8f8f8;
@@ -128,6 +129,11 @@ h4 {
   border: 1px solid #e8e8e8;
   /*border: 1px solid rgba(86,61,124,.2);*/
 }
+
+.grid-center{
+    text-align: center;
+}
+
 
 hr {
   margin-top: 40px;

@@ -24,13 +24,16 @@ var AppTagsInput = function (fieldoptions) {
         };
         $(document).ready(function () {
 
-
             $.each(fieldoptions, function (index) {
                 var fieldOption = fieldoptions[index]["option"];
+                // 复制对应的属性
                 for (key in fieldOption) {
                     option[key] = fieldOption[key];
                 }
+                // 设定tags显示
                 $('#' + fieldoptions[index]["field"]).tagsInput(option);
+                // 设定显示宽度
+                $("#" + fieldoptions[index]["field"]+ "_tag").css("width","100%");
             });
 
         });

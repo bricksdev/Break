@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row row-grid">
     <div class="col-md-12">
 
         <h3>
@@ -6,49 +6,44 @@
                 {{ breaknotify.title }}
             </a>
         </h3>
-        <div class="row"> 
+        <div class="row row-grid"> 
             <div class="col-xs-6  col-md-2">
-                {% i18n Runtime %}
-                <br/>
-                {{ breaknotify.runtime }}
+                <div class="grid-center" >{% i18n Runtime %}</div>
+                <div class="grid-center" >{{ breaknotify.runtime }}</div>
 
             </div>
             <div class="col-xs-6  col-sm-2">
-                {% i18n Breaktime %}
-                <br/>
-                {{ breaknotify.breaktime }}
+                <div class="grid-center" >{% i18n Breaktime %}</div>
+                <div class="grid-center" >{{ breaknotify.breaktime }}</div>
 
             </div>
             <div class="col-xs-6  col-sm-2">
-                {% i18n Comment %}
-                <br/>
-                {{ breaknotify.comment }}
+                <div class="grid-center" >{% i18n Comment %}</div>
+                <div class="grid-center" >{{ breaknotify.comment }}</div>
 
             </div>
             <div class="col-xs-6  col-sm-2">
-                {% i18n RelationClient %}
-                <br/>
+                <div class="grid-center" >{% i18n RelationClient %}</div>
                 {% if (breaknotify.relusers) %}
 
                 {% for reluser in breaknotify.relusers.split(',') %}
-                <i class="muted fa fa-tag"></i>&nbsp;
+                <div class="grid-center" ><i class="muted fa fa-tag"></i>&nbsp;
                 <a href="{{ '/users/' + reluser }}" class="tag">{{ reluser }}</a>
                 &nbsp;&nbsp;
+                </div>
                 {% endfor %}
                 {% endif %}
 
 
             </div>
             <div class="col-xs-6  col-sm-2">
-                {% i18n CreateTime %}
-                <br/>
-                {{ breaknotify.createdAt.toISOString()|date('M d, Y  h:m a') }}
+                <div class="grid-center" >{% i18n CreateTime %}</div>
+                <div class="grid-center" >{{ breaknotify.createdAt.toISOString()|date('M d, Y  h:m a') }}</div>
 
             </div>
             <div class="col-xs-6  col-sm-2">
-                {% i18n State %}
-                <br/>
-                {{ breaknotify.state }} &nbsp;
+                <div class="grid-center" >{% i18n State %}</div>
+                <div class="grid-center" >{{ breaknotify.state }} &nbsp;</div>
             </div>
         </div>
     </div>
