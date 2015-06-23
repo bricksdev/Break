@@ -43,7 +43,7 @@ var validation = function (brk, cb) {
         errs.push(new Error(localutils.error("EB0011")));// title cannot be blank.
     }
 
-        
+
     if (!brk.relusers) {
         errs.push(new Error(localutils.error("EB0009")));// relation user cannot be blank.
     }
@@ -71,19 +71,20 @@ exports.load = function (req, res, next, id) {
 exports.index = function (req, res) {
     var page = (req.params.page > 0 ? req.params.page : 1) - 1;
     var perPage = 30;
-    
+
     var options = {
         perPage: perPage,
         page: page,
         criteria: {user: req.user.id}
     };
     Breaks.list(options, function (err, brks) {
-        if (err)
+        if (err){
             return res.render('500');
+        }
         Breaks.count().exec(function (err, count) {
             res.render('breaks/index', {
                 title: localutils.message('EB0002'), //'Breaks'
-                breaklist: brks,
+                breaks: brks,
                 page: page + 1,
                 pages: Math.ceil(count / perPage)
             });
@@ -93,9 +94,9 @@ exports.index = function (req, res) {
 
 
 exports.create = function (req, res) {
-    
+
     var breaks = new Breaks(req.body);
-    
+
     breaks.user = req.user;
     validation(breaks, function (err) {
         if (err) {
@@ -105,7 +106,7 @@ exports.create = function (req, res) {
                 errors: utils.errors(err.errors || err)
             });
         }
-        
+
         breaks.save(function (err) {
             if (!err) {
                 req.flash('success', localutils.message('EB0003'));//'Successfully create break notify!'
@@ -172,10 +173,10 @@ exports.update = function (req, res) {
  */
 
 exports.show = function (req, res) {
-    res.render('breaks/show', {
+        res.render('breaks/show', {
         title: req.breaks.title,
         breaks: req.breaks
-    });
+        });
 };
 
 /**
@@ -200,3 +201,7 @@ exports.new = function (req, res) {
         breaks: new Breaks({})
     });
 };
+
+exports.select = function(req, res){
+    var username = req.params.username
+}

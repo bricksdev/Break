@@ -13,8 +13,13 @@
             }
         });
         $('.carousel').carousel();
+        var fieldopts = [
+            {field: "tags", option: {defaultText: '{% i18n HintEnterTags %}'}},
+            {field: "relusers", option: {defaultText: '{% i18n HintEnterRelationClient %}'}}
+        ];
+        AppTagsInput(fieldopts);
     });
-    
+
 </script>
 <!--<script>
   var _gaq = _gaq || [];

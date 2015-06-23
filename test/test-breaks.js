@@ -182,6 +182,38 @@ describe('Breaks', function () {
         });
     });
 
+    describe("Get /breaks/:id", function () {
+        context('When logged in', function () {
+            before(function (done) {
+                // login the user
+                agent
+                        .post('/users/session')
+                        .field('email', 'foobar@example.com')
+                        .field('password', 'foobar')
+                        .end(done);
+            });
+
+            it("load breaks info", function (done) {
+
+                Breaks
+                        .findOne({title: 'boo'})
+                        .populate('user')
+                        .exec(function (err, breaks) {
+                            should.not.exist(err);
+                            agent.get('/breaks')
+                                    .field('id', breaks.id)
+                                    .expect('Content-Type', /html/)
+                                    .expect(200)
+                                    .expect(/boo/)
+                                    .end(done);
+
+                        });
+
+            });
+        });
+
+    });
+
     after(function (done) {
         require('./helper').clearDb(done);
     });

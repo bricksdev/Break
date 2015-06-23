@@ -102,15 +102,15 @@ module.exports = function (app, passport) {
     app.delete('/articles/:id', articleAuth, articles.destroy);
     
     // breaks routes
-    app.param('id', breaks.load);
+    app.param('breakid', breaks.load);
     app.get('/breaks', auth.requiresLogin, breaks.index);
     app.get('/breaks/new', auth.requiresLogin, breaks.new);
     app.post('/breaks', auth.requiresLogin, breaks.create);
-    app.get('/breaks/:id', breaks.show);
-    app.get('/breaks/:id/edit', breaksAuth, breaks.edit);
-    app.put('/breaks/:id', breaksAuth, breaks.update);
-    app.delete('/breaks/:id', breaksAuth, breaks.destroy);
-
+    app.get('/breaks/:breakid', breaks.show);
+    app.get('/breaks/:breakid/edit', breaksAuth, breaks.edit);
+    app.put('/breaks/:breakid', breaksAuth, breaks.update);
+    app.delete('/breaks/:breakid', breaksAuth, breaks.destroy);
+    app.get('/breaks/select', auth.requiresLogin, breaks.select);
     // home route
     app.get('/', homes.home);
     app.get('/search', homes.search);

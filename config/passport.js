@@ -19,22 +19,22 @@ var github = require('./passport/github');
  */
 
 module.exports = function (passport, config) {
-  // serialize sessions
-  passport.serializeUser(function(user, done) {
-    done(null, user.id)
-  })
+    // serialize sessions
+    passport.serializeUser(function (user, done) {
+        done(null, user.id);
+    });
 
-  passport.deserializeUser(function(id, done) {
-    User.load({ criteria: { _id: id } }, function (err, user) {
-      done(err, user)
-    })
-  })
+    passport.deserializeUser(function (id, done) {
+        User.load({criteria: {_id: id}}, function (err, user) {
+            done(err, user);
+        });
+    });
 
-  // use these strategies
-  passport.use(local);
-  passport.use(google);
-  passport.use(facebook);
-  passport.use(twitter);
-  passport.use(linkedin);
-  passport.use(github);
+    // use these strategies
+    passport.use(local);
+    passport.use(google);
+    passport.use(facebook);
+    passport.use(twitter);
+    passport.use(linkedin);
+    passport.use(github);
 };
