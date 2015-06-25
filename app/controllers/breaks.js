@@ -202,6 +202,3 @@ exports.new = function (req, res) {
     });
 };
 
-exports.select = function(req, res){
-    var username = req.params.username
-}

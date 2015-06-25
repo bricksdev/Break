@@ -32,8 +32,8 @@ describe('Users', function () {
 
             }
             it('no email - should respond with errors', function (done) {
-                
-                        agent.post('/users')
+
+                agent.post('/users')
                         .field('name', 'Foo bar')
                         .field('username', 'foobar')
                         .field('email', '')
@@ -47,8 +47,8 @@ describe('Users', function () {
 
 
             it('no name - should respond with errors', function (done) {
-                
-                        agent.post('/users')
+
+                agent.post('/users')
                         .field('name', '')
                         .field('username', 'foobar')
                         .field('email', 'foobar@example.com')
@@ -76,8 +76,8 @@ describe('Users', function () {
             });
 
             it('should redirect to /articles', function (done) {
-                
-                        agent.post('/users')
+
+                agent.post('/users')
                         .field('name', 'Foo bar')
                         .field('username', 'foobar')
                         .field('email', 'foobar@example.com')
@@ -103,6 +103,56 @@ describe('Users', function () {
                     user.email.should.equal('foobar@example.com');
                     done();
                 });
+            });
+        });
+    });
+
+    describe("create android client", function () {
+
+        it("create android client", function (done) {
+
+            agent.post('/users/client')
+                    .field('name', 'AClient')
+                    .field('username', 'AClient')
+//                        .field('email', 'foobar@example.com')
+                    .field('password', 'foobar')
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .expect(/true/)
+                    .end(done);
+        });
+
+
+    });
+
+    describe("select client user", function () {
+        before(function (done) {
+            // create a user
+            var user = new User({
+                email: 'foobar@example.com',
+                name: 'AClient',
+                username: 'AClient',
+                password: 'foobar',
+                provider: "client"
+            });
+            user.save(done);
+        });
+        context('When logged in', function () {
+            before(function (done) {
+                // login the user
+                agent
+                        .post('/users/session')
+                        .field('email', 'foobar@example.com')
+                        .field('password', 'foobar')
+                        .end(done);
+            });
+            it("fuzzy select android client should response json object", function (done) {
+                agent.get('/users/select/ac')
+
+                        .expect(200)
+                        .expect('Content-Type', /json/)
+                        .expect(/true/)
+                        .end(done);
             });
         });
     });

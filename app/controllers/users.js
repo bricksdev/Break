@@ -33,9 +33,9 @@ var validation = function (user, cb) {
         }
         if (!user.email) {
             errs.push(new Error(localutils.error("EU0002")));
-        }else{
-            validateEMail(user.email, function(bool){
-                if(bool){
+        } else {
+            validateEMail(user.email, function (bool) {
+                if (bool) {
                     errs.push(new Error(localutils.error("EU0003")));
                 }
             });
@@ -53,10 +53,10 @@ var validation = function (user, cb) {
 
 var validateEMail = function (email, cb) {
     var bool = false;
-    User.find({ email: email }).exec(function (err, users) {
-        
-         cb(!err && (users.length === 0));
-        
+    User.find({email: email}).exec(function (err, users) {
+
+        cb(!err && (users.length === 0));
+
     });
     cb(bool);
 };
@@ -86,10 +86,12 @@ exports.load = function (req, res, next, id) {
         criteria: {_id: id}
     };
     User.load(options, function (err, user) {
-        if (err)
+        if (err) {
             return next(err);
-        if (!user)
-            return next(new Error(localutils.error("EU0007" ,{userid: id})));//'Failed to load User '
+        }
+        if (!user) {
+            return next(new Error(localutils.error("EU0007", {userid: id})));//'Failed to load User '
+        }
         req.profile = user;
         next();
     });
@@ -101,6 +103,7 @@ exports.load = function (req, res, next, id) {
 
 exports.create = function (req, res) {
     var user = new User(req.body);
+
     user.provider = 'local';
     validation(user, function (err) {
         if (err) {
@@ -168,7 +171,7 @@ exports.login = function (req, res) {
 
 exports.signup = function (req, res) {
     res.render('users/signup', {
-        title: localutils.message("EU0008"),//Sign up
+        title: localutils.message("EU0008"), //Sign up
         user: new User()
     });
 };
@@ -199,4 +202,41 @@ function login(req, res) {
     delete req.session.returnTo;
     res.redirect(redirectTo);
 }
+/**
+ * 获取AJAX用户信息,模糊检索
+ */
+exports.select = function (req, res) {
+    
+    var name = req.params.name;
+    
+    User.find({name:  { $regex: name,$options:"si"}, provider: "client"})
+            .select("name username")
+            .exec(function (err, users) {
+                if (~err) {
+                    return res.send({success:true,datas:users});
+                }
+                
+                res.send({success:false});
+            });
+};
+/**
+ * 创建客户端
+ * @param  req
+ * @returns json {success:bool}
+ */
+exports.createClient = function (req, res) {
+    var user = new User(req.body);
+    user.provider = "client";
+    user.save(function (err) {
+        if (err) {
+            return res.send({
+                errors: utils.errors(err.errors || err),
+                success: false
+            });
+        }
 
+        res.send({
+            success: true
+        });
+    });
+};

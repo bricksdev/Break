@@ -33,7 +33,9 @@ module.exports = function (app, passport) {
     app.get('/login', users.login);
     app.get('/signup', users.signup);
     app.get('/logout', users.logout);
+    
     app.post('/users', users.create);
+    
     app.post('/users/session',
             passport.authenticate('local', {
                 failureRedirect: '/login',
@@ -90,7 +92,10 @@ module.exports = function (app, passport) {
             }), users.authCallback);
 
     app.param('userId', users.load);
-
+    
+    app.get('/users/select/:name', auth.requiresLogin, users.select);
+    app.post('/users/client', users.createClient);
+    
     // article routes
     app.param('id', articles.load);
     app.get('/articles', articles.index);
@@ -110,7 +115,7 @@ module.exports = function (app, passport) {
     app.get('/breaks/:breakid/edit', breaksAuth, breaks.edit);
     app.put('/breaks/:breakid', breaksAuth, breaks.update);
     app.delete('/breaks/:breakid', breaksAuth, breaks.destroy);
-    app.get('/breaks/select', auth.requiresLogin, breaks.select);
+    
     // home route
     app.get('/', homes.home);
     app.get('/search', homes.search);
