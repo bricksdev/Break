@@ -6,7 +6,17 @@
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
+var getRelusers = function (relusers) {
+    return relusers.join(',');
+};
 
+/**
+ * Setters
+ */
+
+var setRelusers = function (relusers) {
+    return relusers.split(',');
+};
 /**
  * Userdetail Schema
  */
@@ -17,9 +27,7 @@ var UserdetailSchema = new Schema({
     address: {type: String, default: ''},
     phone: {type: String, default: ''},
     comment: {type: String, default: ''},
-    relusers: [{
-            user: {type: Schema.ObjectId, ref: 'User'}
-        }]
+    relusers: {type: [], get: getRelusers, set: setRelusers}
 });
 
 
@@ -40,7 +48,6 @@ UserdetailSchema.statics = {
     load: function (options, cb) {
         this.findOne(options.criteria)
                 .populate('user', 'name username')
-                .populate('relusers.user', 'name username')
                 .exec(cb);
     }
 };

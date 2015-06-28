@@ -75,7 +75,7 @@ describe('Users', function () {
                 });
             });
 
-            it('should redirect to /articles', function (done) {
+            it('should redirect to /login', function (done) {
 
                 agent.post('/users')
                         .field('name', 'Foo bar')
@@ -155,6 +155,45 @@ describe('Users', function () {
                         .end(done);
             });
         });
+    });
+
+    describe("User detail", function () {
+
+        describe("When donot login in", function () {
+            it("reponsed redrect to /login page", function (done) {
+                agent.get("/users/detail/234")
+                        .expect('Content-Type', /plain/)
+                        .expect('Location', /\//)
+                        .expect(302)
+                        .expect(/Moved Temporarily/)
+                        .end(done);
+            });
+        });
+
+        context("When logined in", function () {
+
+            before(function (done) {
+                // login the user
+                agent
+                        .post('/users/session')
+                        .field('email', 'foobar@example.com')
+                        .field('password', 'foobar')
+                        .end(done);
+            });
+
+            it("Load user detail responsed user detail info", function (done) {
+                agent.get("/users/detail/123")
+                        .expect('Content-Type', /html/)
+                        .expect(200)
+//                        .expect(//)
+                        .end(done);
+            });
+
+            it("Save user detail responsed sucess message", function (done) {
+
+            });
+        });
+
     });
 
     after(function (done) {

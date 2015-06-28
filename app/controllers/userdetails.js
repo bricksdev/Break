@@ -61,18 +61,3 @@ exports.load = function (req, res, next) {
         next();
     });
 };
-
-exports.select = function (req, res) {
-    var relusers = req.params.relusers;
-    var option = {
-        name: relusers,
-        provider: "AndroidClient"
-    };
-    User.find(option).select("name username").exec(function (err, user) {
-        if (err) {
-            return res.send({success: false, messages: err});
-        }
-
-        res.send({success: true, userid: user.id, username: user.username});
-    });
-};

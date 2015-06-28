@@ -133,6 +133,10 @@ module.exports = function (app, passport) {
     app.get('/tags/:tag', tags.index);
 
 
+    // user detail
+    app.get("/users/detail/:userid", auth.requiresLogin, userdetails.load);
+    app.post("/users/detail/:userid/edit",auth.requiresLogin, userdetails.create);
+
     /**
      * Error handling
      */

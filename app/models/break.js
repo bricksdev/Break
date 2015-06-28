@@ -6,10 +6,6 @@
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
-
-/**
- * Break Schema
- */
 var getRelusers = function (relusers) {
     return relusers.join(',');
 };
@@ -21,6 +17,10 @@ var getRelusers = function (relusers) {
 var setRelusers = function (relusers) {
     return relusers.split(',');
 };
+/**
+ * Break Schema
+ */
+
 var BreaksSchema = new Schema({
     title: {type: String, default: ''},
     user: {type: Schema.ObjectId, ref: 'User'},
