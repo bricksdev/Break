@@ -159,19 +159,7 @@ describe('Users', function () {
 
     describe("User detail", function () {
 
-        describe("When donot login in", function () {
-            it("reponsed redrect to /login page", function (done) {
-                agent.get("/users/detail/234")
-                        .expect('Content-Type', /plain/)
-                        .expect('Location', /\//)
-                        .expect(302)
-                        .expect(/Moved Temporarily/)
-                        .end(done);
-            });
-        });
-
         context("When logined in", function () {
-
             before(function (done) {
                 // login the user
                 agent
@@ -180,17 +168,34 @@ describe('Users', function () {
                         .field('password', 'foobar')
                         .end(done);
             });
-
             it("Load user detail responsed user detail info", function (done) {
-                agent.get("/users/detail/123")
+                agent.get("/users/detail/557d8a27f155b8b54e1b1845")
                         .expect('Content-Type', /html/)
                         .expect(200)
 //                        .expect(//)
                         .end(done);
             });
+            
+            it("Edit user detail redrect user detail edit", function (done) {
+                agent.get("/users/detail/557d8a27f155b8b54e1b1845/edit")
+                        .expect('Content-Type', /html/)
+                        .expect(200)
+                        .end(done);
+            });
 
             it("Save user detail responsed sucess message", function (done) {
 
+                agent.post("/users/detail/557d8a27f155b8b54e1b1845/edit/123")
+                        .field("sex","1")
+                        .field("address","深圳")
+                        .field("phone","12345678912")
+                        .field("comment","测试")
+                        .field("relusers","AClient")
+                        .expect('Content-Type', /plain/)
+                        .expect('Location', /\//)
+                        .expect(302)
+                        .expect(/Moved Temporarily/)
+                        .end(done);
             });
         });
 

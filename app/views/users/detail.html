@@ -1,0 +1,87 @@
+{% extends '../layouts/default.html' %}
+
+{% block main %}
+<h1>{{ user.name || user.username }}</h1>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" ><a href="/users/{{ user.id }}">{% i18n BaseInfo %}</a></li>
+    <li role="presentation" class="active"><a href="/users/detail/{{ user.id }}">{% i18n DetailsInfo %}</a></li>
+</ul>
+<br/>
+<form action="{{ '/users/detail/' + user.id }}" method="post" onsubmit="return confirm('{% i18n AreYouSure %}')" class="form-horizontal">
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">{% i18n FullName %}</label>
+        <div class="col-sm-10">
+            <p class="form-control-static">{{ user.name }}</p>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="username" class="col-sm-2 control-label">{% i18n Username %}</label>
+        <div class="col-sm-10">
+            <p class="form-control-static">{{ user.username }}</p>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="sex" class="col-sm-2 control-label">{% i18n Sex %}</label>
+        <div class="col-sm-10">
+            <p class="form-control-static">
+            {% if (detail.sex === '1') %}
+                {% i18n Male %}
+            {% else %}
+                {% i18n Female %}
+            {% endif %}
+            </p>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="address" class="col-sm-2 control-label">{% i18n Address %}</label>
+        <div class="col-sm-10">
+            <p class="form-control-static">{{ detail.address }}</p>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="phone" class="col-sm-2 control-label">{% i18n Phone %}</label>
+        <div class="col-sm-10">
+            <p class="form-control-static">{{ detail.phone }}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comment" class="col-sm-2 control-label">{% i18n Comment %}</label>
+        <div class="col-sm-10">
+            <p class="form-control-static">{{ detail.comment }}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="relusers" class="col-sm-2 control-label">{% i18n RelationClient %}</label>
+        <div class="col-sm-10">
+            <p class="form-control-static"> 
+                {% if (detail.relusers) %}
+
+                {% for reluser in detail.relusers.split(',') %}
+            <div class="grid-center" ><i class="muted fa fa-tag"></i>&nbsp;
+                <a href="{{ '/users/client/' + reluser }}" class="tag">{{ reluser }}</a>
+                &nbsp;&nbsp;
+            </div>
+            {% endfor %}
+            {% endif %}
+            </p>
+        </div>
+    </div>
+    <br>
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <a href="{{ '/users/detail/' + user.id + '/edit' }}" title="{% i18n Edit %}" class="btn btn-default">
+        {% i18n Edit %}
+    </a>
+
+</form>
+{% endblock %}

@@ -42,6 +42,7 @@ module.exports = function (app, passport) {
                 failureFlash: localutils.error('EU0011')//Invalid email or password.
             }), users.session);
     app.get('/users/:userId', users.show);
+    
     app.get('/auth/facebook',
             passport.authenticate('facebook', {
                 scope: ['email', 'user_about_me'],
@@ -95,6 +96,8 @@ module.exports = function (app, passport) {
     
     app.get('/users/select/:name', auth.requiresLogin, users.select);
     app.post('/users/client', users.createClient);
+    // get client user
+    app.get('/users/client/:username',users.showClientUser)
     
     // article routes
     app.param('id', articles.load);
@@ -134,8 +137,9 @@ module.exports = function (app, passport) {
 
 
     // user detail
-    app.get("/users/detail/:userid", auth.requiresLogin, userdetails.load);
-    app.post("/users/detail/:userid/edit",auth.requiresLogin, userdetails.create);
+    app.get("/users/detail/:userid", auth.requiresLogin, userdetails.show);
+    app.get("/users/detail/:userid/edit",auth.requiresLogin, userdetails.edit);
+    app.post("/users/detail/:userid/edit/:detailid",auth.requiresLogin, userdetails.create);
 
     /**
      * Error handling

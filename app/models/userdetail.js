@@ -23,7 +23,7 @@ var setRelusers = function (relusers) {
 
 var UserdetailSchema = new Schema({
     user: {type: Schema.ObjectId, ref: 'User'},
-    sex: {type: String, default: ''},
+    sex: {type: String, default: '1'},
     address: {type: String, default: ''},
     phone: {type: String, default: ''},
     comment: {type: String, default: ''},
@@ -47,7 +47,7 @@ UserdetailSchema.statics = {
 
     load: function (options, cb) {
         this.findOne(options.criteria)
-                .populate('user', 'name username')
+                .populate('user', 'id name username')
                 .exec(cb);
     }
 };

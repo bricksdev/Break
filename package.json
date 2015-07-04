@@ -1,6 +1,6 @@
 {
   "name": "BreakWeb",
-  "description": "A demo app illustrating the usage of express, mongoose, passportjs, swig, swig extend for localization and other modules in nodejs",
+  "description": "智休系统规范孩子学习及生活，培养合理的行为习惯",
   "keywords": [
     "express",
     "mongoose",

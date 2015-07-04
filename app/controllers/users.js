@@ -240,3 +240,21 @@ exports.createClient = function (req, res) {
         });
     });
 };
+
+
+exports.showClientUser = function (req, res) {
+    var username = req.params.username;
+
+    User.findOne({name: username})
+
+            .exec(function (err, user) {
+                if (~err && user) {
+                    return res.render('users/show', {
+                        title: user.name,
+                        user: user
+                    });
+                }
+                
+                return res.redirect("/users/"+req.user.id)
+            });
+};
