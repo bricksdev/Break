@@ -246,8 +246,7 @@ exports.showClientUser = function (req, res) {
     var username = req.params.username;
 
     User.findOne({name: username})
-
-            .exec(function (err, user) {
+        .exec(function (err, user) {
                 if (~err && user) {
                     return res.render('users/show', {
                         title: user.name,
@@ -255,6 +254,13 @@ exports.showClientUser = function (req, res) {
                     });
                 }
                 
-                return res.redirect("/users/"+req.user.id)
-            });
+        return res.redirect("/users/"+req.user.id)
+    });
+};
+
+exports.checkClient = function(req, res){
+    var csrf_token = req.csrfToken();
+    res.header('Content-Type', 'application/json');
+    res.send(JSON.stringify({success:true, token:csrf_token}));
+    res.end();
 };

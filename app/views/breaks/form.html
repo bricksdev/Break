@@ -1,70 +1,80 @@
 {% extends '../layouts/default.html' %}
 
 {% block main %}
-  <h1>{{ title }}</h1>
+<h1>{{ title }}</h1>
 {% endblock %}
 
 {% block content %}
-  {% if breaks.isNew %}
-    {% set action = '/breaks' %}
-  {% else %}
-    {% set action = '/breaks/' + breaks._id %}
-  {% endif %}
+{% if breaks.isNew %}
+{% set action = '/breaks' %}
+{% else %}
+{% set action = '/breaks/' + breaks._id %}
+{% endif %}
 
-  <div class="row">
+<div class="row">
     <div class="col-md-8">
-      <form method="post" action="{{ action }}" enctype="multipart/form-data" role="form" class="form-horizontal">
+        <form method="post" action="{{ action }}" enctype="multipart/form-data" role="form" class="form-horizontal">
 
-        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+            <input type="hidden" name="_csrf" value="{{ csrf_token }}">
 
-        {% if not breaks.isNew %}
-          <input type="hidden" name="_method" value="PUT">
-        {% endif %}
+            {% if not breaks.isNew %}
+            <input type="hidden" name="_method" value="PUT">
+            {% endif %}
 
-        <div class="form-group">
-          <label for="title" class="col-sm-2 control-label">{% i18n Title %}</label>
-          <div class="col-sm-10">
-            <input type="text" name="title" value="{{ breaks.title }}" placeholder="{% i18n HintEnterTitle %}" class="form-control" id="title">
-          </div>
-        </div>
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">{% i18n Title %}</label>
+                <div class="col-sm-10">
+                    <input type="text" name="title" value="{{ breaks.title }}" placeholder="{% i18n HintEnterTitle %}" class="form-control" id="title">
+                </div>
+            </div>
 
-        <div class="form-group">
-          <label for="runtime" class="col-sm-2 control-label">{% i18n Runtime %}</label>
-          <div class="col-sm-10">
-            <input type="text" name="runtime" value="{{ breaks.runtime }}" placeholder="{% i18n HintEnterRuntime %}" class="form-control" id="runtime">
-          </div>
-        </div>
+            <div class="form-group">
+                <label for="runtime" class="col-sm-2 control-label">{% i18n Runtime %}</label>
+                <div class="col-sm-10">
+                    <input type="text" name="runtime" value="{{ breaks.runtime }}" placeholder="{% i18n HintEnterRuntime %}" class="form-control" id="runtime">
+                </div>
+            </div>
 
-        <div class="form-group">
-          <label for="breaktime" class="col-sm-2 control-label">{% i18n Breaktime %}</label>
-          <div class="col-sm-10">
-            <input type="text" name="breaktime" value="{{ breaks.breaktime }}" placeholder="{% i18n HintEnterBreaktime %}" class="form-control" id="breaktime">
-          </div>
-        </div>
+            <div class="form-group">
+                <label for="breaktime" class="col-sm-2 control-label">{% i18n Breaktime %}</label>
+                <div class="col-sm-10">
+                    <input type="text" name="breaktime" value="{{ breaks.breaktime }}" placeholder="{% i18n HintEnterBreaktime %}" class="form-control" id="breaktime">
+                </div>
+            </div>
 
-        <div class="form-group">
-          <label for="comment" class="col-sm-2 control-label">{% i18n Comment %}</label>
-          <div class="col-sm-10">
-            <input type="text" name="comment" value="{{ breaks.comment }}" placeholder="{% i18n EnterYouComment %}" class="form-control" id="comment">
-          </div>
-        </div>
+            <div class="form-group">
+                <label for="comment" class="col-sm-2 control-label">{% i18n Comment %}</label>
+                <div class="col-sm-10">
+                    <input type="text" name="comment" value="{{ breaks.comment }}" placeholder="{% i18n EnterYouComment %}" class="form-control" id="comment">
+                </div>
+            </div>
 
 
-        <div class="form-group">
-          <label for="relusers" class="col-sm-2 control-label">{% i18n RelationClient %}</label>
-          <div class="col-sm-10">
-            <input type="text" name="relusers" value="{{ breaks.relusers }}" placeholder="{% i18n HintEnterRelationClient %}" class="form-control" id="relusers">
-          </div>
-        </div>
+            <div class="form-group">
+                <label for="relusers" class="col-sm-2 control-label">{% i18n RelationClient %}</label>
+                <div class="col-sm-10">
+                    {% if (userdetail.relusers) %}
 
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-primary" type="submit">{% i18n Save %}</button>
-            &nbsp;
-            <a href="/breaks" class="btn btn-link">{% i18n Cancel %}</a>
-          </div>
-        </div>
-      </form>
+                    {% for reluser in userdetail.relusers.split(',') %}
+
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="{{'relusers_'+reluser}}" name='relusers' value="{{reluser}}"> {{reluser}}
+                    </label>
+                    {% endfor %}
+                    {% endif %}
+
+                    <!--<input type="text" name="relusers" value="{{ breaks.relusers }}" placeholder="{% i18n HintEnterRelationClient %}" class="form-control" id="relusers">-->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">{% i18n Save %}</button>
+                    &nbsp;
+                    <a href="/breaks" class="btn btn-link">{% i18n Cancel %}</a>
+                </div>
+            </div>
+        </form>
     </div>
-  </div>
+</div>
 {% endblock %}

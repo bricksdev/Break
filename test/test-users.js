@@ -122,6 +122,15 @@ describe('Users', function () {
                     .end(done);
         });
 
+        it("check android client", function (done) {
+
+            agent.get('/users/client')
+                    
+                    
+                    .expect(200)
+                    
+                    .end(done);
+        });
 
     });
 

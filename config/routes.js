@@ -33,7 +33,7 @@ module.exports = function (app, passport) {
     app.get('/login', users.login);
     app.get('/signup', users.signup);
     app.get('/logout', users.logout);
-    
+    app.get('/users/client', users.checkClient);
     app.post('/users', users.create);
     
     app.post('/users/session',
@@ -95,9 +95,11 @@ module.exports = function (app, passport) {
     app.param('userId', users.load);
     
     app.get('/users/select/:name', auth.requiresLogin, users.select);
+    
     app.post('/users/client', users.createClient);
+    
     // get client user
-    app.get('/users/client/:username',users.showClientUser)
+    app.get('/users/client/:username',users.showClientUser);
     
     // article routes
     app.param('id', articles.load);

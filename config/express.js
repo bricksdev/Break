@@ -68,8 +68,6 @@ module.exports = function (app, passport) {
     Localization.extend(swig);
     // set views path, template engine and default layout
     app.engine('html', swig.renderFile);
-//    app.engine('html', dustjs.dust({cache: false}));
-//    app.engine('js', dustjs.js({cache: false}));
     app.set('views', config.root + '/app/views');
     app.set('view engine', 'html');
     

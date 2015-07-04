@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose');
 var Breaks = mongoose.model('Breaks');
+var Userdetail = mongoose.model('Userdetail');
 var utils = require('../../lib/utils');
 var localutils = require('../../lib/localutils');
 var env = process.env.NODE_ENV || 'development';
@@ -78,7 +79,7 @@ exports.index = function (req, res) {
         criteria: {user: req.user.id}
     };
     Breaks.list(options, function (err, brks) {
-        if (err){
+        if (err) {
             return res.render('500');
         }
         Breaks.count().exec(function (err, count) {
@@ -129,9 +130,19 @@ exports.create = function (req, res) {
  */
 
 exports.edit = function (req, res) {
-    res.render('breaks/edit', {
-        title: localutils.message('EB0012', {title: req.breaks.title}), //'Edit '
-        breaks: req.breaks
+    Userdetail.findOne({user: req.user.id}).exec(function (err, detail) {
+        if (err) {
+            return res.redirect('/breaks/index');
+        }
+        // 如果没有设定用户关联关系，跳转到关联用户页面
+        if (~detail || ~detail.relusers || detail.relusers.length === 0) {
+            return res.redirect('/users/detail/' + req.user.id);
+        }
+        res.render('breaks/edit', {
+            title: localutils.message('EB0012', {title: req.breaks.title}), //'Edit '
+            breaks: req.breaks,
+            userdetail: detail
+        });
     });
 };
 
@@ -173,10 +184,10 @@ exports.update = function (req, res) {
  */
 
 exports.show = function (req, res) {
-        res.render('breaks/show', {
+    res.render('breaks/show', {
         title: req.breaks.title,
         breaks: req.breaks
-        });
+    });
 };
 
 /**
@@ -196,9 +207,21 @@ exports.destroy = function (req, res) {
  */
 
 exports.new = function (req, res) {
-    res.render('breaks/new', {
-        title: localutils.message('EB0010'), //'New Article'
-        breaks: new Breaks({})
+    Userdetail.findOne({user: req.user.id}).exec(function (err, detail) {
+        if (err) {
+            return res.redirect('/breaks/index');
+        }
+        // 如果没有设定用户关联关系，跳转到关联用户页面
+        if (!detail || detail.relusers.length === 0) {
+            return res.redirect('/users/detail/' + req.user.id);
+        }
+
+        res.render('breaks/new', {
+            title: localutils.message('EB0010'), //'New Article'
+            breaks: new Breaks(),
+            userdetail: detail
+        });
     });
+
 };
 
