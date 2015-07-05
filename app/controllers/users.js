@@ -261,6 +261,5 @@ exports.showClientUser = function (req, res) {
 exports.checkClient = function(req, res){
     var csrf_token = req.csrfToken();
     res.header('Content-Type', 'application/json');
-    res.send(JSON.stringify({success:true, token:csrf_token}));
-    res.end();
+    res.send({success:true, token:csrf_token}); 
 };
