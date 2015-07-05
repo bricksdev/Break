@@ -259,7 +259,10 @@ exports.showClientUser = function (req, res) {
 };
 
 exports.checkClient = function(req, res){
-    var csrf_token = req.csrfToken();
+    var csrf_token;
+    if (process.env.NODE_ENV !== 'test') {
+        csrf_token = req.csrfToken();
+    }
     res.header('Content-Type', 'application/json');
     res.send({success:true, token:csrf_token}); 
 };

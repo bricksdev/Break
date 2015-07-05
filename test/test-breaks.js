@@ -9,6 +9,7 @@ var mongoose = require('mongoose')
         , app = require('../server')
         , context = describe
         , User = mongoose.model('User')
+        , Userdetail = mongoose.model('Userdetail')
         , Breaks = mongoose.model('Breaks')
         , agent = request.agent(app);
 var count;
@@ -29,6 +30,12 @@ describe('Breaks', function () {
             password: 'foobar'
         });
         user.save(done);
+        console.log(user.id);
+        var detail = new Userdetail({
+            user:user.id,
+            relusers:"U001"
+        });
+        detail.save(detail);
     });
     describe('GET /breaks/new', function () {
         context('When not logged in', function () {
@@ -45,6 +52,8 @@ describe('Breaks', function () {
 
         context('When logged in', function () {
             before(function (done) {
+                
+                
                 // login the user
                 agent
                         .post('/users/session')
@@ -52,6 +61,7 @@ describe('Breaks', function () {
                         .field('password', 'foobar')
                         .end(done);
             });
+            
 
             it('should respond with Content-Type text/html', function (done) {
                 agent
