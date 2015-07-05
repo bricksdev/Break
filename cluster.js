@@ -20,8 +20,9 @@ if(cluster.isMaster) {
 else {
   //工作进程分支，启动服务器
   var app = require('./server');
-  app.listen(3000);
-  console.log("Express服务器启动, 开始监听3000端口, 以 %s 模式运行.", app.settings.env);
+  var port = process.env.PORT || 3000;
+  app.listen(port);
+  console.log("Express服务器启动, 开始监听 %s 端口, 以 %s 模式运行.", port, app.settings.env);
 }
 //当主进程被终止时，关闭所有工作进程
 process.on('SIGTERM', function () {
