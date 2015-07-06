@@ -36,7 +36,8 @@ module.exports = function (app, passport) {
     // for android get token
     app.get('/users/client', users.checkClient);
     app.post('/users', users.create);
-
+    app.post("/users/client/signin", users.clientSignin);
+            
     app.post('/users/session',
             passport.authenticate('local', {
                 failureRedirect: '/login',

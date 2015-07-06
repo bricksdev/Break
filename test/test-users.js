@@ -150,7 +150,7 @@ describe('Users', function () {
             before(function (done) {
                 // login the user
                 agent
-                        .post('/users/session')
+                        .post('/users/client/signin')
                         .field('email', 'foobar@example.com')
                         .field('password', 'foobar')
                         .end(done);
@@ -160,7 +160,7 @@ describe('Users', function () {
 
                         .expect(200)
                         .expect('Content-Type', /json/)
-                        .expect(/true/)
+                        
                         .end(done);
             });
         });

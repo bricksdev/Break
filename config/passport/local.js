@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var LocalStrategy = require('passport-local').Strategy;
 var config = require('config');
 var User = mongoose.model('User');
-
+var localutils = require('../../lib/localutils');
 /**
  * Expose
  */
@@ -24,10 +24,10 @@ module.exports = new LocalStrategy({
     User.load(options, function (err, user) {
       if (err) return done(err)
       if (!user) {
-        return done(null, false, { message: 'Unknown user' });
+        return done(null, false, { message: localutils.error('EU0012') });
       }
       if (!user.authenticate(password)) {
-        return done(null, false, { message: 'Invalid password' });
+        return done(null, false, { message: localutils.error('EU0013') });
       }
       return done(null, user);
     });

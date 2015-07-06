@@ -1,4 +1,5 @@
 <script src='/js/jquery.min.js'></script>
+<script src='/js/jquery-ui.min.js'></script>
 <script src='/js/bootstrap.min.js'></script>
 <script src='/js/jquery.tagsinput.min.js'></script>
 <script src='/js/jquery.scrollUp.min.js'></script>
@@ -13,13 +14,20 @@
             }
         });
         $('.carousel').carousel();
+
         var fieldopts = [
             {field: "tags", option: {defaultText: '{% i18n HintEnterTags %}'}},
-            {field: "relusers", option: {defaultText: '{% i18n HintEnterRelationClient %}'}}
+            {field: "relusers", option: {
+                    defaultText: '{% i18n HintEnterRelationClient %}',
+                    autocomplete: {selectFirst: true, autoFill: true},
+                    autocomplete_url:'/users/select'
+                    
+                }
+            }
         ];
         AppTagsInput(fieldopts);
-        
-        
+
+
     });
 
 </script>

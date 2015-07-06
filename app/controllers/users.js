@@ -147,6 +147,28 @@ exports.show = function (req, res) {
 };
 
 exports.signin = function (req, res) {
+
+};
+
+exports.clientSignin = function (req, res) {
+
+    var email = req.body.email;
+    var password = req.body.password;
+    var options = {
+        criteria: {email: email, provider: "client"},
+        select: 'name username email hashed_password salt'
+    };
+    User.load(options, function (err, user) {
+        if (err)
+            return done(err)
+        if (!user) {
+            return res.send({success: false, errors: localutils.error('EU0012')});
+        }
+        if (!user.authenticate(password)) {
+            return res.send({success: false, errors: localutils.error('EU0013')});
+        }
+        return res.send({success: true});
+    });
 };
 
 /**
@@ -206,17 +228,17 @@ function login(req, res) {
  * 获取AJAX用户信息,模糊检索
  */
 exports.select = function (req, res) {
-    
-    var name = req.params.name;
-    
-    User.find({name:  { $regex: name,$options:"si"}, provider: "client"})
-            .select("name username")
+
+    var name = req.params.name || req.params.term;
+
+    User.find({name: {$regex: name, $options: "si"}, provider: "client"})
+            .select("username")
             .exec(function (err, users) {
                 if (~err) {
-                    return res.send({success:true,datas:users});
+                    return res.send(users);
                 }
-                
-                res.send({success:false});
+
+                res.send([]);
             });
 };
 /**
@@ -246,23 +268,23 @@ exports.showClientUser = function (req, res) {
     var username = req.params.username;
 
     User.findOne({name: username})
-        .exec(function (err, user) {
+            .exec(function (err, user) {
                 if (~err && user) {
                     return res.render('users/show', {
                         title: user.name,
                         user: user
                     });
                 }
-                
-        return res.redirect("/users/"+req.user.id)
-    });
+
+                return res.redirect("/users/" + req.user.id)
+            });
 };
 
-exports.checkClient = function(req, res){
+exports.checkClient = function (req, res) {
     var csrf_token;
     if (process.env.NODE_ENV !== 'test') {
         csrf_token = req.csrfToken();
     }
     res.header('Content-Type', 'application/json');
-    res.send({success:true, token:csrf_token}); 
+    res.send({success: true, token: csrf_token});
 };
