@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var utils = require('../../lib/utils');
 var localutils = require('../../lib/localutils');
+var util = require('util');
 
 var oAuthTypes = [
     'github',
@@ -228,16 +229,23 @@ function login(req, res) {
  * 获取AJAX用户信息,模糊检索
  */
 exports.select = function (req, res) {
-
-    var name = req.params.name || req.params.term;
+    var name = req.query.term;
 
     User.find({name: {$regex: name, $options: "si"}, provider: "client"})
             .select("username")
             .exec(function (err, users) {
                 if (~err) {
-                    return res.send(users);
+                    var usernames = [];
+                    if (util.isArray(users)) {
+                        for(var idx in users){
+                            var user = users[idx];
+                            usernames.push(user.username);
+                        }
+                    } else {
+                        usernames.push(users.username);
+                    }
+                    return res.send(usernames);
                 }
-
                 res.send([]);
             });
 };

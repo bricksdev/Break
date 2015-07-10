@@ -37,7 +37,7 @@ module.exports = function (app, passport) {
     app.get('/users/client', users.checkClient);
     app.post('/users', users.create);
     app.post("/users/client/signin", users.clientSignin);
-            
+    
     app.post('/users/session',
             passport.authenticate('local', {
                 failureRedirect: '/login',
@@ -95,9 +95,10 @@ module.exports = function (app, passport) {
             }), users.authCallback);
 
     app.param('userId', users.load);
-    
-    app.get('/users/select/:name', auth.requiresLogin, users.select);
-    
+ 
+                
+    // 获取ajax的请求用户
+    app.get('/users/client/select/user', auth.requiresLogin, users.select);
     app.post('/users/client', users.createClient);
     
     // get client user
@@ -143,7 +144,7 @@ module.exports = function (app, passport) {
     // user detail
     app.get("/users/detail/:userid", auth.requiresLogin, userdetails.show);
     app.get("/users/detail/:userid/edit",auth.requiresLogin, userdetails.edit);
-    app.post("/users/detail/:userid/edit/:detailid",auth.requiresLogin, userdetails.create);
+    app.put("/users/detail/:userid/save/:detailid",auth.requiresLogin, userdetails.save);
 
     /**
      * Error handling

@@ -8,7 +8,7 @@
     <li role="presentation" class="active"><a href="/users/detail/{{ user.id }}">{% i18n DetailsInfo %}</a></li>
 </ul>
 <br/>
-<form action="{{ '/users/detail/' + user.id + '/edit/' + detail.id }}" method="post" onsubmit="return confirm('{% i18n AreYouSure %}')" class="form-horizontal">
+<form action="{{ '/users/detail/' + user.id + '/save/' + detail.id }}" method="post" onsubmit="return confirm('{% i18n AreYouSure %}')" class="form-horizontal">
     <input type="hidden" name="_csrf" value="{{ csrf_token }}">
     {% if not detail.isNew %}
     <input type="hidden" name="_method" value="PUT">

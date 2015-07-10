@@ -32,39 +32,49 @@ exports.edit = function (req, res) {
         res.render('users/editdetail', {
             title: localutils.message('EUD001'),
             detail: detail,
-            user:req.user
+            user: req.user
         });
     });
 }
 
-exports.create = function (req, res) {
-
-    var detail = req.detail;
-    if (detail) {
-        delete req.body.user;
-        detail = extend(detail, req.body);
-    } else {
-        detail = new Userdetail(req.body);
-        detail.user = req.user;
-    }
-
-    validation(detail, function (err) {
-
+exports.save = function (req, res) {
+    var options = {user: req.params.detailid};
+    Userdetail.load(options, function (err, detail) {
         if (err) {
             return res.render('users/detail', {
                 title: localutils.message('EUD001'), //'Edit User Detail'
-                detail: detail,
                 errors: utils.errors(err.errors || err)
             });
         }
 
-        detail.save(function (err) {
-            if (!err) {
-                req.flash('success', localutils.message('EUD002'));//'Successfully save user detail!'
-                return res.redirect('/users/detail/' + detail.user.id);
+        if (detail) {
+            delete req.body.user;
+            detail = extend(detail, req.body);
+        } else {
+            detail = new Userdetail(req.body);
+            detail.user = req.user;
+        }
+
+        validation(detail, function (err) {
+
+            if (err) {
+                return res.render('users/detail', {
+                    title: localutils.message('EUD001'), //'Edit User Detail'
+                    detail: detail,
+                    errors: utils.errors(err.errors || err)
+                });
             }
+
+            detail.save(function (err) {
+                if (!err) {
+                    req.flash('success', localutils.message('EUD002'));//'Successfully save user detail!'
+                    return res.redirect('/users/detail/' + detail.user.id);
+                }
+            });
         });
+
     });
+
 };
 
 /**
@@ -87,10 +97,11 @@ exports.show = function (req, res) {
             detail = new Userdetail();
 
         }
+        req.detail = detail;
         res.render('users/detail', {
             title: localutils.message('EUD001'),
             detail: detail,
-            user:req.user
+            user: req.user
         });
     });
 

@@ -156,7 +156,7 @@ describe('Users', function () {
                         .end(done);
             });
             it("fuzzy select android client should response json object", function (done) {
-                agent.get('/users/select/ac')
+                agent.get('/users/client/select/user?term=a')
 
                         .expect(200)
                         .expect('Content-Type', /json/)
@@ -194,7 +194,7 @@ describe('Users', function () {
 
             it("Save user detail responsed sucess message", function (done) {
 
-                agent.post("/users/detail/557d8a27f155b8b54e1b1845/edit/123")
+                agent.post("/users/detail/557d8a27f155b8b54e1b1845/save/123")
                         .field("sex","1")
                         .field("address","深圳")
                         .field("phone","12345678912")
