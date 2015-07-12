@@ -2,11 +2,11 @@
 /**
  * Module dependencies.
  */
-
+var fs = require('fs');
 var express = require('express');
 var session = require('express-session');
 var compression = require('compression');
-var morgan = require('morgan');
+var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
 var bodyParser = require('body-parser');
@@ -15,6 +15,7 @@ var csrf = require('csurf');
 var multer = require('multer');
 var swig = require('swig');
 var Localization = require('../lib/nationalized');
+var errorLogfile = fs.createWriteStream('error.log', {flags: 'a'});
 
 var mongoStore = require('connect-mongo')(session);
 var flash = require('connect-flash');
@@ -55,9 +56,9 @@ module.exports = function (app, passport) {
 
     // Don't log during tests
     // Logging middleware
-    if (env !== 'test')
-        app.use(morgan(log));
-
+    if (env !== 'test'){
+        app.use(logger('dev'));
+    }
     // Swig templating engine settings
     if (env === 'development' || env === 'test') {
         swig.setDefaults({
@@ -129,6 +130,14 @@ module.exports = function (app, passport) {
         // This could be moved to view-helpers :-)
         app.use(function (req, res, next) {
             res.locals.csrf_token = req.csrfToken();
+            next();
+        });
+        
+        // development error handler
+        // will print stacktrace
+        app.use(function (err, req, res, next) {
+            var meta = '[' + new Date() + ']' + req.url + '\n';
+            errorLogfile.write(meta + err.stack + '\n');
             next();
         });
     }

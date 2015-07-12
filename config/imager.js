@@ -23,7 +23,8 @@ module.exports = {
     },
     storage: {
         Local: {
-            path: process.env.IMAGE_LOCAL_PATH
+            path: process.env.IMAGE_LOCAL_PATH,
+            mode: 0777
         },
         S3: {
             key: process.env.IMAGER_S3_KEY,
