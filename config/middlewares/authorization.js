@@ -3,6 +3,7 @@
  *  Generic require login routing middleware
  */
 var localutils = require('../../lib/localutils');
+var util = require('util');
 exports.requiresLogin = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -12,6 +13,13 @@ exports.requiresLogin = function (req, res, next) {
     }
 
     res.redirect('/login');
+};
+
+exports.requiresClientLogin = function (req, res, next) {
+    if (req.headers["clientid"] === "lckj2015" && req.session.clientuser) {
+        return next();
+    }
+    res.send({success:false,errors:localutils.error('EU0014')});
 };
 
 /*

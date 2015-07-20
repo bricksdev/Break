@@ -33,18 +33,15 @@ module.exports = function (app, passport) {
     app.get('/login', users.login);
     app.get('/signup', users.signup);
     app.get('/logout', users.logout);
-    // for android get token
-    app.get('/users/client', users.checkClient);
     app.post('/users', users.create);
-    app.post("/users/client/signin", users.clientSignin);
-    
+
     app.post('/users/session',
             passport.authenticate('local', {
                 failureRedirect: '/login',
                 failureFlash: localutils.error('EU0011')//Invalid email or password.
             }), users.session);
     app.get('/users/:userId', users.show);
-    
+
     app.get('/auth/facebook',
             passport.authenticate('facebook', {
                 scope: ['email', 'user_about_me'],
@@ -95,15 +92,15 @@ module.exports = function (app, passport) {
             }), users.authCallback);
 
     app.param('userId', users.load);
- 
-                
+
+
     // 获取ajax的请求用户
     app.get('/users/client/select/user', auth.requiresLogin, users.select);
-    app.post('/users/client', users.createClient);
     
+
     // get client user
-    app.get('/users/client/:username',users.showClientUser);
-    
+    app.get('/users/client/:username', users.showClientUser);
+
     // article routes
     app.param('id', articles.load);
     app.get('/articles', articles.index);
@@ -113,7 +110,7 @@ module.exports = function (app, passport) {
     app.get('/articles/:id/edit', articleAuth, articles.edit);
     app.put('/articles/:id', articleAuth, articles.update);
     app.delete('/articles/:id', articleAuth, articles.destroy);
-    
+
     // breaks routes
     app.param('breakid', breaks.load);
     app.get('/breaks', auth.requiresLogin, breaks.index);
@@ -123,11 +120,11 @@ module.exports = function (app, passport) {
     app.get('/breaks/:breakid/edit', breaksAuth, breaks.edit);
     app.put('/breaks/:breakid', breaksAuth, breaks.update);
     app.delete('/breaks/:breakid', breaksAuth, breaks.destroy);
-    
+
     // home route
     app.get('/', homes.home);
     app.get('/search', homes.search);
-    
+
     app.param('imagename', articles.image);
     app.get('/articles/image/:imagename', articles.image);
 
@@ -140,12 +137,19 @@ module.exports = function (app, passport) {
     // tag routes
     app.get('/tags/:tag', tags.index);
 
-
     // user detail
     app.get("/users/detail/:userid", auth.requiresLogin, userdetails.show);
-    app.get("/users/detail/:userid/edit",auth.requiresLogin, userdetails.edit);
-    app.put("/users/detail/:userid/save/:detailid",auth.requiresLogin, userdetails.save);
+    app.get("/users/detail/:userid/edit", auth.requiresLogin, userdetails.edit);
+    app.put("/users/detail/:userid/save/:detailid", auth.requiresLogin, userdetails.save);
 
+
+    // client routes
+    // for android get token
+    app.post('/client/users/client', users.createClient);
+    app.get('/client/users/client', users.checkClient);
+    app.post("/client/users/signin", users.clientSignin);
+    app.get('/client/select/breaks', auth.requiresClientLogin, breaks.selectEffective);
+    app.post('/client/breaks/update', auth.requiresClientLogin, breaks.clientUpdate);
     /**
      * Error handling
      */

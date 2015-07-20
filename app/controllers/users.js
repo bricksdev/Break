@@ -168,7 +168,8 @@ exports.clientSignin = function (req, res) {
         if (!user.authenticate(password)) {
             return res.send({success: false, errors: localutils.error('EU0013')});
         }
-        return res.send({success: true});
+        req.session.clientuser = user;
+        return res.send({success: true, user:user});
     });
 };
 

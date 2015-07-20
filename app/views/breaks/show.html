@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="form-group">
+    <label for="starttime" class="col-sm-2 control-label">{% i18n Starttime %}</label>
+    <div class="col-sm-10">
+        <p class="form-control-static">{{ breaks.starttime.toISOString()|date('Y-M-d  h:m') }}</p>
+    </div>
+</div>
 
 <div class="form-group">
     <label for="runtime" class="col-sm-2 control-label">{% i18n Runtime %}</label>

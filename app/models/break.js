@@ -24,11 +24,12 @@ var setRelusers = function (relusers) {
 var BreaksSchema = new Schema({
     title: {type: String, default: ''},
     user: {type: Schema.ObjectId, ref: 'User'},
+    starttime:{type:Date, default: Date.now},
     runtime: {type: Number, default: 0},
     breaktime: {type: Number, default: 0},
     comment: {type: String, default: ''},
     relusers: {type: [], get: getRelusers, set: setRelusers},
-    state: {type: String, default: ''},
+    state: {type: String, default: '-1'},
     createdAt: {type: Date, default: Date.now}
 });
 

@@ -25,7 +25,7 @@
             {% endfor %}
           </p>
         {% endif %}
-        <span class="muted">{{ article.createdAt.toISOString()|date('M d, Y  h:m a') }}</span>
+        <span class="muted">{{ article.createdAt.toISOString()|date('Y-M-d  h:m') }}</span>
       </div>
     </div>
     <div class="col-md-4">

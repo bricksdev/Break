@@ -225,3 +225,45 @@ exports.new = function (req, res) {
 
 };
 
+exports.selectEffective = function(req, res){
+    var username = req.query.username;
+    Breaks.find({relusers: username,state:"-1"})
+            .sort({'starttime': -1})
+            .exec(function (err, breaks) {
+        if(err){
+            return res.send({success:false,errors:utils.errors(err.errors || err)});
+        }
+        return res.send({success:true,breaks:breaks});
+    });
+};
+
+exports.clientUpdate = function(req, res){
+    var breakid = req.params.breakid;
+    var state = req.params.state;
+    
+    Breaks.findOne({id:breakid}).exec(function(err, brks){
+        if(err){
+            
+            return res.send({success:false, errors:utils.errors(err.errors || err)});
+        }
+        
+        if(!brks){
+            return res.send({success:false, errors:localutils.message('EB0015', {breakid: breakid})});
+        }
+        
+        // 验证状态 如果已经完成，不允许重新更新状态
+        if(brks.state === "1"){
+            return res.send({success:false, errors:localutils.message('EB0016', {title: brks.title})});
+        }
+        
+        brks.state = state;
+        brks.save(function (err) {
+            if (err) {
+                return res.send({success:false, errors:utils.errors(err.errors || err)});
+            }
+            // 设定更新成功
+            return res.send({success:true});
+        });
+        
+    });
+};

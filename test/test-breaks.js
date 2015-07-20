@@ -30,10 +30,10 @@ describe('Breaks', function () {
             password: 'foobar'
         });
         user.save(done);
-        console.log(user.id);
+        
         var detail = new Userdetail({
-            user:user.id,
-            relusers:"U001"
+            user: user.id,
+            relusers: "U001"
         });
         detail.save(detail);
     });
@@ -52,8 +52,8 @@ describe('Breaks', function () {
 
         context('When logged in', function () {
             before(function (done) {
-                
-                
+
+
                 // login the user
                 agent
                         .post('/users/session')
@@ -61,7 +61,7 @@ describe('Breaks', function () {
                         .field('password', 'foobar')
                         .end(done);
             });
-            
+
 
             it('should respond with Content-Type text/html', function (done) {
                 agent
@@ -162,7 +162,7 @@ describe('Breaks', function () {
                             .field('runtime', '1')
                             .field('breaktime', '1')
                             .field('comment', '1')
-                            .field('relusers', 'ad1')
+                            .field('relusers', 'U001')
                             .expect('Content-Type', /plain/)
                             .expect('Location', /\/breaks\//)
                             .expect(302)
@@ -188,6 +188,7 @@ describe('Breaks', function () {
                                 done();
                             });
                 });
+
             });
         });
     });
@@ -220,8 +221,59 @@ describe('Breaks', function () {
                         });
 
             });
+
+
         });
 
+    });
+
+    describe("Client breaks operation", function () {
+        context('When login from client', function () {
+            before(function (done) {
+                var user = new User({
+            email: 'U001@example.com',
+            name: 'U001',
+            username: 'U001',
+            password: 'test',
+            provider:"client"
+            });
+            user.save(function(err, user){});
+                // login the user
+                agent
+                        .post('/client/users/signin')
+                        .field('email', 'U001@example.com')
+                        .field('password', 'test')
+                        .expect(/true/)
+                        .expect(200)
+                        .end(done);
+            });
+
+            it("/client/select/breaks/ should select effactive breaks", function (done) {
+                agent.get("/client/select/breaks?username=U001")
+                        .set('clientid', 'lckj2015')
+                        .expect('Content-Type', /json/)
+                        .expect(/true/)
+                        .expect(200)
+                        .end(done);
+            });
+            it("update breaks state. should update success", function (done) {
+                Breaks
+                        .findOne({title: 'boo'})
+                        .populate('user')
+                        .exec(function (err, brks) {
+                            agent.post("/client/breaks/update")
+                                    .set('clientid', 'lckj2015')
+                                    .field("breakid", brks.id)
+                                    .field("state", "0")
+                                    
+                                    .expect('Content-Type', /json/)
+                                    .expect(/true/)
+                                    .expect(200)
+                                    .end(done);
+                        });
+
+            });
+        });
     });
 
     after(function (done) {

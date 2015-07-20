@@ -102,7 +102,7 @@ module.exports = function (app, passport) {
 
     // CookieParser should be above session
     app.use(cookieParser());
-    app.use(cookieSession({secret: 'secret'}));
+    app.use(cookieSession({secret: 'secret-lc2015.net'}));
     app.use(session({
         resave: true,
         saveUninitialized: true,
@@ -110,7 +110,8 @@ module.exports = function (app, passport) {
         store: new mongoStore({
             url: config.db,
             collection: 'sessions'
-        })
+        }),
+        cookie: { secure: true }
     }));
 
     // use passport session
