@@ -238,10 +238,10 @@ exports.selectEffective = function(req, res){
 };
 
 exports.clientUpdate = function(req, res){
-    var breakid = req.params.breakid;
-    var state = req.params.state;
+    var breakid = req.body.breakid;
+    var state = req.body.state;
     
-    Breaks.findOne({id:breakid}).exec(function(err, brks){
+    Breaks.findOne({_id:breakid}).exec(function(err, brks){
         if(err){
             
             return res.send({success:false, errors:utils.errors(err.errors || err)});
